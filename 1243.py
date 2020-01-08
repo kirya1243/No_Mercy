@@ -21,7 +21,8 @@ x = 0
 y = 460
 screen = pygame.display.set_mode(size)
 screen.fill((255, 255, 255))
-screen.blit(load_image("Raul.png"), (x, y))
+screen.blit(load_image("Raul_r.png"), (x, y))
+raul = "Raul_r.png"
 running = True
 while running:
     for event in pygame.event.get():
@@ -31,19 +32,21 @@ while running:
             if event.key == 273:
                 y -= 10
                 screen.fill((255, 255, 255))
-                screen.blit(load_image("Raul.png"), (x, y))
+                screen.blit(load_image(raul), (x, y))
             if event.key == 274:
                 y += 10
                 screen.fill((255, 255, 255))
-                screen.blit(load_image("Raul.png"), (x, y))
+                screen.blit(load_image(raul), (x, y))
             if event.key == 275:
                 x += 10
+                raul = "Raul_r.png"
                 screen.fill((255, 255, 255))
-                screen.blit(load_image("Raul.png"), (x, y))
+                screen.blit(load_image(raul), (x, y))
             if event.key == 276:
                 x -= 10
+                raul = "Raul_l.png"
                 screen.fill((255, 255, 255))
-                screen.blit(load_image("Raul.png"), (x, y))
+                screen.blit(load_image(raul), (x, y))
     pygame.display.flip()
 # завершение работы:
 pygame.quit()
