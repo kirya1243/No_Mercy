@@ -23,8 +23,12 @@ speed = 10
 kdvij = 0
 
 isJump = False
+right = False
+left = False
 stay = True
+flstay = 0
 jumpCount = 8
+animCount = 0
 
 screen = pygame.display.set_mode(size)
 screen.blit(load_image("bg.jpg"), (0, 0))
@@ -32,45 +36,26 @@ raul = "Raul_r0.png"
 
 
 def DrawWindow():
+    global animCount, raul, kdvij, flstay, left, right, stay
     screen.blit(load_image("bg.jpg"), (0, 0))
-    screen.blit(load_image(raul), (x, y))
-    pygame.display.flip()
-# clock = pygame.time.Clock()
-running = True
-while running:
-    # clock.tick(20)
-    pygame.time.delay(10)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
-    keys = pygame.key.get_pressed()
-    if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and x < 907:
-        x += speed
-        raul = "Raul_r0.png"
-        stay = False
-    if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and x > 5:
-        x -= speed
-        raul = "Raul_l0.png"
-        stay = False
-    if not(isJump):
-        if keys[pygame.K_SPACE]:
-            isJump = True
-            raul = raul[:6] + '0' + raul[6 + 1:]
-            stay = False
-    else:
-        if jumpCount >= -8:
-            if jumpCount < 0:
-                y += (jumpCount ** 2) / 2
-            else:
-                y -= (jumpCount ** 2) / 2
-            jumpCount -= 1
+    if right:
+        if raul == "Raul_r1b.png":
+            raul = "Raul_r0.png"
         else:
-            isJump = False
-            stay = True
-            jumpCount = 8
+            raul = "Raul_r1b.png"
+
+    if left:
+        if raul == "Raul_l1b.png":
+            raul = "Raul_l0.png"
+        else:
+            raul = "Raul_l1b.png"
 
     if stay:
+        print(flstay, raul)
+        if flstay == 0:
+            raul = raul[:6] + '0.png'
+            flstay = 1
         if raul[6] == "0" and kdvij % 2 == 0:
             raul = raul[:6] + '1' + raul[6 + 1:]
         elif raul[6] == "1" and kdvij % 2 == 0:
@@ -85,7 +70,49 @@ while running:
             raul = raul[:6] + '0' + raul[6 + 1:]
         kdvij += 1
 
-    stay = True
+    screen.blit(load_image(raul), (x, y))
+    pygame.display.flip()
+
+clock = pygame.time.Clock()
+running = True
+while running:
+    clock.tick(15)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    keys = pygame.key.get_pressed()
+    if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and x < 907:
+        x += speed
+        right = True
+        left = False
+        stay = False
+        flstay = 0
+    elif (keys[pygame.K_LEFT] or keys[pygame.K_a]) and x > 5:
+        x -= speed
+        right = False
+        left = True
+        stay = False
+        flstay = 0
+    else:
+        stay = True
+        right = False
+        left = False
+    if not(isJump):
+        if keys[pygame.K_SPACE]:
+            isJump = True
+            #raul = raul[:6] + '0' + raul[6 + 1:]
+            stay = False
+    else:
+        if jumpCount >= -8:
+            if jumpCount < 0:
+                y += (jumpCount ** 2) / 2
+            else:
+                y -= (jumpCount ** 2) / 2
+            jumpCount -= 1
+        else:
+            isJump = False
+            jumpCount = 8
     DrawWindow()
 # завершение работы:
 pygame.quit()
