@@ -16,7 +16,7 @@ def load_image(name, colorkey=None):
 
 
 pygame.init()
-size = 960, 540
+size = 1200, 540
 x = 5
 y = 455
 speed = 10
@@ -52,7 +52,6 @@ def DrawWindow():
             raul = "Raul_l1b.png"
 
     if stay:
-        print(flstay, raul)
         if flstay == 0:
             raul = raul[:6] + '0.png'
             flstay = 1
