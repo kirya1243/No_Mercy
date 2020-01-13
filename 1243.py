@@ -33,23 +33,23 @@ animCount = 0
 screen = pygame.display.set_mode(size)
 screen.blit(load_image("bg.jpg"), (0, 0))
 raul = "Raul_r0.png"
-
+wright = ["Raul_r1b.png", "Raul_r2b.png", "Raul_r3b.png", "Raul_r2b.png"]
+wleft = ["Raul_l1b.png", "Raul_l2b.png", "Raul_l3b.png", "Raul_l2b.png"]
 
 def DrawWindow():
     global animCount, raul, kdvij, flstay, left, right, stay
     screen.blit(load_image("bg.jpg"), (0, 0))
 
+    if animCount + 1 >= 15:
+        animCount = 0
+
     if right:
-        if raul == "Raul_r1b.png":
-            raul = "Raul_r0.png"
-        else:
-            raul = "Raul_r1b.png"
+        raul = wright[animCount % 3]
+        animCount += 1
 
     if left:
-        if raul == "Raul_l1b.png":
-            raul = "Raul_l0.png"
-        else:
-            raul = "Raul_l1b.png"
+        raul = wleft[animCount % 3]
+        animCount += 1
 
     if stay:
         if flstay == 0:
@@ -75,7 +75,7 @@ def DrawWindow():
 clock = pygame.time.Clock()
 running = True
 while running:
-    clock.tick(15)
+    clock.tick(30)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -97,6 +97,7 @@ while running:
         stay = True
         right = False
         left = False
+        animCount = 0
     if not(isJump):
         if keys[pygame.K_SPACE]:
             isJump = True
