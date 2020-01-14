@@ -43,9 +43,13 @@ isJump1 = False
 right1 = False
 left1 = False
 stay1 = True
+flshoot1 = True
+kshoot1 = 0
+kpshoot1 = 0
 flstay1 = 0
 jumpCount1 = 8
 animCount1 = 0
+lastMove1 = "left"
 
 screen = pygame.display.set_mode(size)
 screen.blit(load_image("bg.jpg"), (0, 0))
@@ -67,14 +71,14 @@ class Snaryad():
 
 
 class Snaryad1():
-    def __init__(self, x, y, facing):
+    def __init__(self, x, y, facing1):
         self.x = x
         self.y = y
-        self.facing = facing
-        self.vel = 30 * facing
+        self.facing1 = facing1
+        self.vel1 = 30 * facing1
 
     def draw(self):
-        screen.blit(load_image("bullet.png"), (self.x, self.y))
+        screen.blit(load_image("bullet1.png"), (self.x, self.y))
 
 
 def DrawWindow():
@@ -155,6 +159,9 @@ def DrawWindow():
     for bullet in bullets:
         bullet.draw()
 
+    for bullet1 in bullets1:
+        bullet1.draw()
+
     screen.blit(load_image(raul), (x1, y1))
     screen.blit(load_image(dima), (x2, y2))
     screen.fill(pygame.Color('red'), pygame.Rect(10, 10, 200, 20))
@@ -166,6 +173,7 @@ def DrawWindow():
 
 clock = pygame.time.Clock()
 bullets = []
+bullets1 = []
 running = True
 while running:
     clock.tick(30)
@@ -194,6 +202,27 @@ while running:
     elif lastMove == "left":
         facing = -1
 
+    for bullet1 in bullets1:
+        if 1200 > bullet1.x > 0:
+            bullet1.x += bullet1.vel1
+        else:
+            bullets1.pop(bullets1.index(bullet1))
+
+        if x1 + 48 >= bullet1.x >= x1 and y1 + 80 >= bullet1.y >= y1:
+            damage1 += 25
+            bullets1.pop(bullets1.index(bullet1))
+
+    if kshoot1 == 3:
+        flshoot1 = False
+        kpshoot1 = 0
+        kshoot1 = 0
+    if kpshoot1 == 10:
+        flshoot1 = True
+    if lastMove1 == "right":
+        facing1 = 1
+    elif lastMove1 == "left":
+        facing1 = -1
+
     keys = pygame.key.get_pressed()
     if keys[pygame.K_SPACE]:
         if lastMove == "right" and flshoot:
@@ -202,6 +231,18 @@ while running:
         elif lastMove == "left" and flshoot:
             bullets.append(Snaryad(x1, y1 + 32, facing))
             kshoot += 1
+
+    if keys[pygame.K_KP0]:
+        if lastMove1 == "right" and flshoot1:
+            bullets1.append(Snaryad1(x2 + 48, y2 + 32, facing1))
+            kshoot1 += 1
+        elif lastMove1 == "left" and flshoot1:
+            bullets1.append(Snaryad1(x2, y2 + 32, facing1))
+            kshoot1 += 1
+
+    if keys[pygame.K_F1]:
+        damage = 0
+        damage1 = 0
 
     if keys[pygame.K_d] and x1 < 1147:
         x1 += speed
@@ -243,12 +284,14 @@ while running:
         right1 = True
         left1 = False
         stay1 = False
+        lastMove1 = "right"
         flstay1 = 0
     elif keys[pygame.K_LEFT] and x2 > 5:
         x2 -= speed
         right1 = False
         left1 = True
         stay1 = False
+        lastMove1 = "left"
         flstay1 = 0
     else:
         stay1 = True
@@ -271,6 +314,7 @@ while running:
             isJump1 = False
             jumpCount1 = 8
     kpshoot += 1
+    kpshoot1 += 1
     DrawWindow()
 # завершение работы:
 pygame.quit()
