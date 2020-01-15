@@ -15,12 +15,41 @@ def load_image(name, colorkey=None):
     return image
 
 
+def load_level(filename):
+    filename = "data/" + filename
+    with open(filename, 'r') as mapFile:
+        level_map = [line.strip() for line in mapFile]
+    max_width = max(map(len, level_map))
+    return list(map(lambda x: x.ljust(max_width, '.'), level_map))
+
+
+class Platform:
+    def __init__(self):
+        self.img = pygame.image.load('data/texture.jpg')
+
+
+def make_level(level, platform):
+    x, y = 0, 0
+    for row in level:
+        for col in row:
+            if col == '#':
+                screen.blit(platform.img, (x, y))
+            x += 30
+        x = 0
+        y += 30
+
+
 pygame.init()
 size = 1200, 540
+screen = pygame.display.set_mode(size)
+screen.blit(load_image("bg.jpg"), (0, 0))
+
+pl = Platform()
+
 x1 = 5
-y1 = 455
+y1 = 430
 x2 = 1147
-y2 = 455
+y2 = 430
 speed = 10
 damage = 0
 damage1 = 0
@@ -51,8 +80,6 @@ jumpCount1 = 8
 animCount1 = 0
 lastMove1 = "left"
 
-screen = pygame.display.set_mode(size)
-screen.blit(load_image("bg.jpg"), (0, 0))
 raul = "Raul_r0.png"
 dima = "Raul_l0.png"
 wright = ["Raul_r1b.png", "Raul_r2b.png", "Raul_r3b.png", "Raul_r2b.png"]
@@ -85,6 +112,8 @@ def DrawWindow():
     global animCount, raul, kdvij, flstay, left, right, stay
     global animCount1, dima, kdvij1, flstay1, left1, right1, stay1
     screen.blit(load_image("bg.jpg"), (0, 0))
+
+    make_level(load_level('level_1.txt'), pl)
 
     if animCount + 1 >= 15:
         animCount = 0
@@ -182,20 +211,20 @@ while running:
             running = False
 
     for bullet in bullets:
-        if 1200 > bullet.x > 0:
+        if 1300 > bullet.x > -100:
             bullet.x += bullet.vel
         else:
             bullets.pop(bullets.index(bullet))
 
         if x2 + 48 >= bullet.x >= x2 and y2 + 80 >= bullet.y >= y2:
-            damage += 25
+            damage += 5
             bullets.pop(bullets.index(bullet))
 
-    if kshoot == 3:
+    if kshoot == 10:
         flshoot = False
         kpshoot = 0
         kshoot = 0
-    if kpshoot == 10:
+    if kpshoot == 30:
         flshoot = True
     if lastMove == "right":
         facing = 1
@@ -203,20 +232,20 @@ while running:
         facing = -1
 
     for bullet1 in bullets1:
-        if 1200 > bullet1.x > 0:
+        if 1300 > bullet1.x > -100:
             bullet1.x += bullet1.vel1
         else:
             bullets1.pop(bullets1.index(bullet1))
 
         if x1 + 48 >= bullet1.x >= x1 and y1 + 80 >= bullet1.y >= y1:
-            damage1 += 25
+            damage1 += 5
             bullets1.pop(bullets1.index(bullet1))
 
-    if kshoot1 == 3:
+    if kshoot1 == 10:
         flshoot1 = False
         kpshoot1 = 0
         kshoot1 = 0
-    if kpshoot1 == 10:
+    if kpshoot1 == 30:
         flshoot1 = True
     if lastMove1 == "right":
         facing1 = 1
