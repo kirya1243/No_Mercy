@@ -1,5 +1,5 @@
 import pygame
-from Player import Player
+from Player import Raul
 from Platforms import Platform
 
 SIZE = (640, 480)
@@ -10,7 +10,7 @@ window = pygame.display.set_mode(SIZE)
 screen = pygame.Surface(SIZE)
 
 # создаем героя
-hero = Player(55, 55)
+hero = Raul(55, 55)
 left = right = up = False
 
 # создание уровня
@@ -48,6 +48,8 @@ for row in level:
 done = True
 timer = pygame.time.Clock()
 while done:
+    # keys = pygame.key.get_pressed()
+    # print(keys)
     # блок управления событиями
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
@@ -80,4 +82,4 @@ while done:
     window.blit(screen,(0, 0))
     # обновляем окно
     pygame.display.flip()
-    timer.tick(60)
+    timer.tick(30)

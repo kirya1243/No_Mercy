@@ -1,8 +1,10 @@
 import pygame
 import os
 import pygame.mouse
-from Player import Player
-from Platforms import Platform
+from pygame.sprite import Sprite, collide_rect
+from pygame import Surface
+from pygame.image import load
+from Platforms import Platform, PlatformHidden
 
 
 def load_image(name, colorkey=None):
@@ -25,24 +27,157 @@ def load_level(filename):
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
 
-def make_level(level, platform):
-    x, y = 0, 0
-    for row in level:
-        for col in row:
-            if col == '#':
-                screen.blit(platform.img, (x, y))
-            x += 30
-        x = 0
-        y += 30
-
-
 pygame.init()
 size = 1200, 540
 screen = pygame.display.set_mode(size)
 screen.blit(load_image("bg.jpg"), (0, 0))
 
-hero = Player(55, 55)
-leftP = rightP = upP = False
+
+class Raul(Sprite):
+    def __init__(self, x, y):
+        Sprite.__init__(self)
+        self.image = Surface((48, 80))
+        self.image = load("data/Raul_r0.png").convert_alpha()
+        self.xvel = 0
+        self.yvel = 0
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.onGround = False
+        self.stay = True
+        # self.flshoot = True
+        # self.kshoot = 0
+        # self.kpshoot = 0
+        self.viewSide = 'r'
+        self.stayR = ["Raul_r0.png", "Raul_r1.png", "Raul_r2.png", "Raul_r3.png", "Raul_r4.png", "Raul_r5.png"]
+        self.stayL = ["Raul_l0.png", "Raul_l1.png", "Raul_l2.png", "Raul_l3.png", "Raul_l4.png", "Raul_l5.png"]
+        # self.stayMarker = True
+        self.begR = ["Raul_r1b.png", "Raul_r2b.png", "Raul_r3b.png", "Raul_r2b.png"]
+        self.begL = ["Raul_l1b.png", "Raul_l2b.png", "Raul_l3b.png", "Raul_l2b.png"]
+        # self.kadr = 1
+        self.sChMarker = 1
+        self.bChMarker = 1
+
+    def update(self, left, right, up, platforms):
+        # if self.kadr == 31:
+        #     self.kadr = 1
+
+        if self.stay:
+            self.bChMarker = 1
+            self.begR = ["Raul_r1b.png", "Raul_r2b.png", "Raul_r3b.png", "Raul_r2b.png"]
+            self.begL = ["Raul_l1b.png", "Raul_l2b.png", "Raul_l3b.png", "Raul_l2b.png"]
+            if self.sChMarker == 6:
+                self.sChMarker = 1
+            else:
+                self.sChMarker += 1
+            if self.viewSide == 'l' and self.sChMarker == 1:
+                self.image = load("data/" + self.stayL[0]).convert_alpha()
+                self.stayL.insert(6, self.stayL[0])
+                del self.stayL[0]
+            elif self.viewSide == 'r' and self.sChMarker == 1:
+                self.image = load("data/" + self.stayR[0]).convert_alpha()
+                self.stayR.insert(6, self.stayR[0])
+                del self.stayR[0]
+            # print(self.stayL, '\n', self.stayR, '\n')
+        else:
+            self.sChMarker = 1
+            self.stayR = ["Raul_r0.png", "Raul_r1.png", "Raul_r2.png", "Raul_r3.png", "Raul_r4.png", "Raul_r5.png"]
+            self.stayL = ["Raul_l0.png", "Raul_l1.png", "Raul_l2.png", "Raul_l3.png", "Raul_l4.png", "Raul_l5.png"]
+            if self.bChMarker == 4:
+                self.bChMarker = 1
+            else:
+                self.bChMarker += 1
+            if self.viewSide == 'l' and self.bChMarker == 1:
+                self.image = load("data/" + self.begL[0]).convert_alpha()
+                self.begL.insert(4, self.begL[0])
+                del self.begL[0]
+            elif self.viewSide == 'r' and self.bChMarker == 1:
+                self.image = load("data/" + self.begR[0]).convert_alpha()
+                self.begR.insert(4, self.begR[0])
+                del self.begR[0]
+
+        # bullets = []
+        # if shoot:
+        #     if self.viewSide == "l":
+        #         facing = -1
+        #         bullets.append(Snaryad(self.rect.left + 25, self.rect.top + 32, facing))
+        #         self.kshoot += 1
+        #     elif self.viewSide == "r":
+        #         facing = 1
+        #         bullets.append(Snaryad(self.rect.right - 28, self.rect.top + 32, facing))
+        #         self.kshoot += 1
+
+        if left and not right:
+            self.viewSide = 'l'
+            self.stay = False
+            self.xvel = -MOVE_SPEED
+            # self.image = load("data/Raul_l1b.png").convert_alpha()
+
+        if right and not left:
+            self.viewSide = 'r'
+            self.stay = False
+            self.xvel = MOVE_SPEED
+            # self.image = load("data/Raul_r1b.png").convert_alpha()
+
+        if not(left or right):
+            self.stay = True
+            self.xvel = 0
+            # if self.viewSide == 'l':
+            #     self.image = load("data/Raul_l0.png").convert_alpha()
+            # else:
+            #     self.image = load("data/Raul_r0.png").convert_alpha()
+
+        # if not self.stay:
+        #     self.stayMarker = False
+        # else:
+        #     self.stayMarker = True
+
+        if up:
+            if self.onGround:
+                self.yvel = -JUMP_POWER
+
+        if not self.onGround:
+            self.yvel += GRAVITY
+
+        self.onGround = False
+        if self.rect.x + self.xvel > 0 and self.rect.x + self.xvel < 1152:
+            self.rect.x += self.xvel
+        elif self.rect.x <= 10:
+             self.rect.x = 0
+        elif self.rect.x >= 1142:
+            self.rect.x = 1152
+        self.collide(self.xvel, 0, platforms)
+        self.rect.y += self.yvel
+        # self.kpshoot += 1
+        self.collide(0, self.yvel, platforms)
+        # for bullet in bullets:
+        #     if 1300 > bullet.x > -100:
+        #         bullet.x += bullet.vel
+        #     else:
+        #         bullets.pop(bullets.index(bullet))
+
+            #if x2 + 48 >= bullet.x >= x2 and y2 + 80 >= bullet.y >= y2:
+                # damage += 5
+                # bullets.pop(bullets.index(bullet))
+
+    def collide(self, xvel, yvel, platforms):
+        for pl in platforms:
+            if collide_rect(self, pl):
+                if xvel > 0:
+                    self.rect.right = pl.rect.left
+                if xvel < 0:
+                    self.rect.left = pl.rect.right
+                if yvel > 0:
+                    self.rect.bottom = pl.rect.top
+                    self.onGround = True
+                    self.yvel = 0
+                if yvel < 0:
+                    self.rect.top = pl.rect.bottom
+                    self.yvel = 0
+
+
+hero = Raul(5, 520)
+leftP = rightP = upP = shoot = False
 
 sprite_group = pygame.sprite.Group()
 sprite_group.add(hero)
@@ -55,11 +190,17 @@ for row in load_level('level_1.txt'):
             pl = Platform(x, y)
             sprite_group.add(pl)
             platfroms.append(pl)
-        x += 30
-    y += 30
+        elif col == '0':
+            pl = PlatformHidden(x, y)
+            sprite_group.add(pl)
+            platfroms.append(pl)
+        x += 20
+    y += 20
     x = 0
 
-
+MOVE_SPEED = 10
+JUMP_POWER = 20
+GRAVITY = 2
 x1 = 5
 y1 = 430
 x2 = 1147
@@ -73,6 +214,7 @@ isJump = False
 right = False
 left = False
 stay = True
+shoot = False
 flshoot = True
 kshoot = 0
 kpshoot = 0
@@ -100,7 +242,7 @@ wright = ["Raul_r1b.png", "Raul_r2b.png", "Raul_r3b.png", "Raul_r2b.png"]
 wleft = ["Raul_l1b.png", "Raul_l2b.png", "Raul_l3b.png", "Raul_l2b.png"]
 
 
-class Snaryad():
+class Snaryad:
     def __init__(self, x, y, facing):
         self.x = x
         self.y = y
@@ -111,91 +253,21 @@ class Snaryad():
         screen.blit(load_image("bullet.png"), (self.x, self.y))
 
 
-class Snaryad1():
-    def __init__(self, x, y, facing1):
-        self.x = x
-        self.y = y
-        self.facing1 = facing1
-        self.vel1 = 30 * facing1
-
-    def draw(self):
-        screen.blit(load_image("bullet1.png"), (self.x, self.y))
+# class Snaryad1():
+#     def __init__(self, x, y, facing1):
+#         self.x = x
+#         self.y = y
+#         self.facing1 = facing1
+#         self.vel1 = 30 * facing1
+#
+#     def draw(self):
+#         screen.blit(load_image("bullet1.png"), (self.x, self.y))
 
 
 def DrawWindow():
     global animCount, raul, kdvij, flstay, left, right, stay
     global animCount1, dima, kdvij1, flstay1, left1, right1, stay1
     screen.blit(load_image("bg.jpg"), (0, 0))
-
-    if animCount + 1 >= 15:
-        animCount = 0
-
-    if right:
-        raul = wright[animCount % 3]
-        animCount += 1
-
-    if left:
-        raul = wleft[animCount % 3]
-        animCount += 1
-
-    if stay:
-        if flstay == 0:
-            raul = raul[:6] + '0.png'
-            flstay = 1
-        if raul[6] == "0" and kdvij % 3 == 0:
-            raul = raul[:6] + '1' + raul[6 + 1:]
-        elif raul[6] == "1" and kdvij % 3 == 0:
-            raul = raul[:6] + '2' + raul[6 + 1:]
-        elif raul[6] == "2" and kdvij % 3 == 0:
-            raul = raul[:6] + '3' + raul[6 + 1:]
-        elif raul[6] == "3" and kdvij % 3 == 0:
-            raul = raul[:6] + '4' + raul[6 + 1:]
-        elif raul[6] == "4" and kdvij % 3 == 0:
-            raul = raul[:6] + '5' + raul[6 + 1:]
-        elif raul[6] == "5" and kdvij % 3 == 0:
-            raul = raul[:6] + '0' + raul[6 + 1:]
-        kdvij += 1
-
-    if isJump:
-        if raul[5] == "r":
-            raul = "Raul_r0.png"
-        else:
-            raul = "Raul_l0.png"
-
-    if animCount1 + 1 >= 15:
-        animCount1 = 0
-
-    if right1:
-        dima = wright[animCount1 % 3]
-        animCount1 += 1
-
-    if left1:
-        dima = wleft[animCount1 % 3]
-        animCount1 += 1
-
-    if stay1:
-        if flstay1 == 0:
-            dima = dima[:6] + '0.png'
-            flstay1 = 1
-        if dima[6] == "0" and kdvij1 % 3 == 0:
-            dima = dima[:6] + '1' + dima[6 + 1:]
-        elif dima[6] == "1" and kdvij1 % 3 == 0:
-            dima = dima[:6] + '2' + dima[6 + 1:]
-        elif dima[6] == "2" and kdvij1 % 3 == 0:
-            dima = dima[:6] + '3' + dima[6 + 1:]
-        elif dima[6] == "3" and kdvij1 % 3 == 0:
-            dima = dima[:6] + '4' + dima[6 + 1:]
-        elif dima[6] == "4" and kdvij1 % 3 == 0:
-            dima = dima[:6] + '5' + dima[6 + 1:]
-        elif dima[6] == "5" and kdvij1 % 3 == 0:
-            dima = dima[:6] + '0' + dima[6 + 1:]
-        kdvij1 += 1
-
-    if isJump1:
-        if dima[5] == "r":
-            dima = "Raul_r0.png"
-        else:
-            dima = "Raul_l0.png"
 
     for bullet in bullets:
         bullet.draw()
@@ -205,12 +277,12 @@ def DrawWindow():
 
     screen.blit(load_image(raul), (x1, y1))
     screen.blit(load_image(dima), (x2, y2))
-    screen.fill(pygame.Color('red'), pygame.Rect(10, 10, 200, 20))
-    screen.fill(pygame.Color('green'), pygame.Rect(10, 10, 200 - damage1, 20))
-    screen.fill(pygame.Color('red'), pygame.Rect(990, 10, 200, 20))
-    screen.fill(pygame.Color('green'), pygame.Rect(990 + damage, 10, 200 - damage, 20))
+    screen.fill(pygame.Color('red'), pygame.Rect(25, 10, 200, 20))
+    screen.fill(pygame.Color('green'), pygame.Rect(25, 10, 200 - damage1, 20))
+    screen.fill(pygame.Color('red'), pygame.Rect(975, 10, 200, 20))
+    screen.fill(pygame.Color('green'), pygame.Rect(975 + damage, 10, 200 - damage, 20))
 
-    hero.update(leftP, rightP, upP, platfroms)
+
     sprite_group.draw(screen)
 
     pygame.display.flip()
@@ -227,18 +299,18 @@ while running:
             running = False
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_a:
                 leftP = True
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_d:
                 rightP = True
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_w:
                 upP = True
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_a:
                 leftP = False
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_d:
                 rightP = False
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_w:
                 upP = False
 
     for bullet in bullets:
@@ -257,40 +329,39 @@ while running:
         kshoot = 0
     if kpshoot == 30:
         flshoot = True
-    if lastMove == "right":
+    if hero.viewSide == "r":
         facing = 1
-    elif lastMove == "left":
+    elif hero.viewSide == "l":
         facing = -1
 
-    for bullet1 in bullets1:
-        if 1300 > bullet1.x > -100:
-            bullet1.x += bullet1.vel1
-        else:
-            bullets1.pop(bullets1.index(bullet1))
+    # for bullet1 in bullets1:
+    #     if 1300 > bullet1.x > -100:
+    #         bullet1.x += bullet1.vel1
+    #     else:
+    #         bullets1.pop(bullets1.index(bullet1))
+    #
+    #     if x1 + 48 >= bullet1.x >= x1 and y1 + 80 >= bullet1.y >= y1:
+    #         damage1 += 5
+    #         bullets1.pop(bullets1.index(bullet1))
 
-        if x1 + 48 >= bullet1.x >= x1 and y1 + 80 >= bullet1.y >= y1:
-            damage1 += 5
-            bullets1.pop(bullets1.index(bullet1))
-
-    if kshoot1 == 10:
-        flshoot1 = False
-        kpshoot1 = 0
-        kshoot1 = 0
-    if kpshoot1 == 30:
-        flshoot1 = True
+    # if kshoot1 == 10:
+    #     flshoot1 = False
+    #     kpshoot1 = 0
+    #     kshoot1 = 0
+    # if kpshoot1 == 30:
+    #     flshoot1 = True
     if lastMove1 == "right":
         facing1 = 1
     elif lastMove1 == "left":
         facing1 = -1
-
-    # keys = pygame.key.get_pressed()
-    # if keys[pygame.K_SPACE]:
-    #     if lastMove == "right" and flshoot:
-    #         bullets.append(Snaryad(x1 + 48, y1 + 32, facing))
-    #         kshoot += 1
-    #     elif lastMove == "left" and flshoot:
-    #         bullets.append(Snaryad(x1, y1 + 32, facing))
-    #         kshoot += 1
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_SPACE]:
+        if hero.viewSide == "r" and flshoot:
+            bullets.append(Snaryad(hero.rect.x + 48, hero.rect.y + 32, facing))
+            kshoot += 1
+        elif hero.viewSide == "l" and flshoot:
+            bullets.append(Snaryad(hero.rect.x - 5, hero.rect.y + 32, facing))
+            kshoot += 1
     #
     # if keys[pygame.K_KP0]:
     #     if lastMove1 == "right" and flshoot1:
@@ -300,9 +371,9 @@ while running:
     #         bullets1.append(Snaryad1(x2, y2 + 32, facing1))
     #         kshoot1 += 1
     #
-    # if keys[pygame.K_F1]:
-    #     damage = 0
-    #     damage1 = 0
+    if keys[pygame.K_F1]:
+        damage = 0
+        damage1 = 0
     #
     # if keys[pygame.K_d] and x1 < 1147:
     #     x1 += speed
@@ -377,5 +448,8 @@ while running:
     kpshoot += 1
     kpshoot1 += 1
     DrawWindow()
+    hero.update (leftP, rightP, upP, platfroms)
+    for bullet in bullets:
+        bullet.draw()
 # завершение работы:
 pygame.quit()
