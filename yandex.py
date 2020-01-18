@@ -45,25 +45,28 @@ class Raul(Sprite):
         self.rect.y = y
         self.onGround = False
         self.stay = True
-        # self.flshoot = True
-        # self.kshoot = 0
-        # self.kpshoot = 0
+        self.flshoot = True
+        self.kshoot = 0
+        self.kpshoot = 0
         self.viewSide = 'r'
         self.stayR = ["Raul_r0.png", "Raul_r1.png", "Raul_r2.png", "Raul_r3.png", "Raul_r4.png", "Raul_r5.png"]
         self.stayL = ["Raul_l0.png", "Raul_l1.png", "Raul_l2.png", "Raul_l3.png", "Raul_l4.png", "Raul_l5.png"]
-        # self.stayMarker = True
         self.begR = ["Raul_r1b.png", "Raul_r2b.png", "Raul_r3b.png", "Raul_r2b.png"]
         self.begL = ["Raul_l1b.png", "Raul_l2b.png", "Raul_l3b.png", "Raul_l2b.png"]
-        # self.kadr = 1
         self.sChMarker = 1
-        self.bChMarker = 1
+        self.rChMarker = 1
+        self.lChMarker = 1
 
     def update(self, left, right, up, platforms):
-        # if self.kadr == 31:
-        #     self.kadr = 1
-
+        if left and not right:
+            self.viewSide = 'l'
+            self.stay = False
+        if right and not left:
+            self.viewSide = 'r'
+            self.stay = False
         if self.stay:
-            self.bChMarker = 1
+            self.rChMarker = 1
+            self.lChMarker = 1
             self.begR = ["Raul_r1b.png", "Raul_r2b.png", "Raul_r3b.png", "Raul_r2b.png"]
             self.begL = ["Raul_l1b.png", "Raul_l2b.png", "Raul_l3b.png", "Raul_l2b.png"]
             if self.sChMarker == 6:
@@ -78,87 +81,72 @@ class Raul(Sprite):
                 self.image = load("data/" + self.stayR[0]).convert_alpha()
                 self.stayR.insert(6, self.stayR[0])
                 del self.stayR[0]
-            # print(self.stayL, '\n', self.stayR, '\n')
         else:
             self.sChMarker = 1
             self.stayR = ["Raul_r0.png", "Raul_r1.png", "Raul_r2.png", "Raul_r3.png", "Raul_r4.png", "Raul_r5.png"]
             self.stayL = ["Raul_l0.png", "Raul_l1.png", "Raul_l2.png", "Raul_l3.png", "Raul_l4.png", "Raul_l5.png"]
-            if self.bChMarker == 4:
-                self.bChMarker = 1
-            else:
-                self.bChMarker += 1
-            if self.viewSide == 'l' and self.bChMarker == 1:
-                self.image = load("data/" + self.begL[0]).convert_alpha()
-                self.begL.insert(4, self.begL[0])
-                del self.begL[0]
-            elif self.viewSide == 'r' and self.bChMarker == 1:
-                self.image = load("data/" + self.begR[0]).convert_alpha()
-                self.begR.insert(4, self.begR[0])
-                del self.begR[0]
+            if self.viewSide == 'l':
+                self.rChMarker = 1
+                if self.lChMarker == 1:
+                    self.image = load("data/" + self.begL[0]).convert_alpha()
+                    self.begL.insert(4, self.begL[0])
+                    del self.begL[0]
+                if self.lChMarker == 4:
+                    self.lChMarker = 1
+                else:
+                    self.lChMarker += 1
+            elif self.viewSide == 'r':
+                self.lChMarker = 1
+                if self.rChMarker == 1:
+                    self.image = load("data/" + self.begR[0]).convert_alpha()
+                    self.begR.insert(4, self.begR[0])
+                    del self.begR[0]
+                if self.rChMarker == 4:
+                    self.rChMarker = 1
+                else:
+                    self.rChMarker += 1
+            if left and not right:
+                self.xvel = -MOVE_SPEED
+            elif right and not left:
+                self.xvel = MOVE_SPEED
 
-        # bullets = []
-        # if shoot:
-        #     if self.viewSide == "l":
-        #         facing = -1
-        #         bullets.append(Snaryad(self.rect.left + 25, self.rect.top + 32, facing))
-        #         self.kshoot += 1
-        #     elif self.viewSide == "r":
-        #         facing = 1
-        #         bullets.append(Snaryad(self.rect.right - 28, self.rect.top + 32, facing))
-        #         self.kshoot += 1
+        bullets = []
+        if shoot:
+            if self.viewSide == "l" and self.flshoot:
+                facing = -1
+                bullets.append(Snaryad(self.rect.left + 25, self.rect.top + 32, facing))
+                self.kshoot += 1
+            elif self.viewSide == "r" and self.flshoot:
+                facing = 1
+                bullets.append(Snaryad(self.rect.right - 28, self.rect.top + 32, facing))
+                self.kshoot += 1
 
-        if left and not right:
-            self.viewSide = 'l'
-            self.stay = False
-            self.xvel = -MOVE_SPEED
-            # self.image = load("data/Raul_l1b.png").convert_alpha()
-
-        if right and not left:
-            self.viewSide = 'r'
-            self.stay = False
-            self.xvel = MOVE_SPEED
-            # self.image = load("data/Raul_r1b.png").convert_alpha()
-
-        if not(left or right):
+        if not (left or right):
             self.stay = True
             self.xvel = 0
-            # if self.viewSide == 'l':
-            #     self.image = load("data/Raul_l0.png").convert_alpha()
-            # else:
-            #     self.image = load("data/Raul_r0.png").convert_alpha()
-
-        # if not self.stay:
-        #     self.stayMarker = False
-        # else:
-        #     self.stayMarker = True
-
         if up:
             if self.onGround:
                 self.yvel = -JUMP_POWER
-
         if not self.onGround:
             self.yvel += GRAVITY
-
         self.onGround = False
         if self.rect.x + self.xvel > 0 and self.rect.x + self.xvel < 1152:
             self.rect.x += self.xvel
         elif self.rect.x <= 10:
-             self.rect.x = 0
+            self.rect.x = 0
         elif self.rect.x >= 1142:
             self.rect.x = 1152
         self.collide(self.xvel, 0, platforms)
         self.rect.y += self.yvel
-        # self.kpshoot += 1
+        self.kpshoot += 1
         self.collide(0, self.yvel, platforms)
-        # for bullet in bullets:
-        #     if 1300 > bullet.x > -100:
-        #         bullet.x += bullet.vel
-        #     else:
-        #         bullets.pop(bullets.index(bullet))
-
-            #if x2 + 48 >= bullet.x >= x2 and y2 + 80 >= bullet.y >= y2:
-                # damage += 5
-                # bullets.pop(bullets.index(bullet))
+        for bullet in bullets:
+            if 1300 > bullet.x > -100:
+                bullet.x += bullet.vel
+            else:
+                bullets.pop(bullets.index(bullet))
+        for bullet in bullets:
+            bullet.draw()
 
     def collide(self, xvel, yvel, platforms):
         for pl in platforms:
