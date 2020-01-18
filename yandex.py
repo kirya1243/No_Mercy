@@ -1,7 +1,7 @@
 import pygame
 import os
 import pygame.mouse
-from Player import Player
+from Player import Raul
 from Platforms import Platform
 
 
@@ -41,7 +41,7 @@ size = 1200, 540
 screen = pygame.display.set_mode(size)
 screen.blit(load_image("bg.jpg"), (0, 0))
 
-hero = Player(55, 55)
+hero = Raul(55, 55)
 leftP = rightP = upP = False
 
 sprite_group = pygame.sprite.Group()
