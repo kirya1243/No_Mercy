@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import os
 import pygame.mouse
 from pygame.sprite import Sprite, collide_rect
@@ -100,6 +100,54 @@ pygame.init()
 size = 1200, 540
 screen = pygame.display.set_mode(size)
 screen.blit(load_image("images/level_1.png"), (0, 0))
+pygame.display.set_caption('SUPER KVEIK 2D')
+pygame.display.set_icon(pygame.image.load("data/images/icon.jpg"))
+
+sizem = 1200, 540
+screenm = pygame.display.set_mode(sizem)
+screenm.blit(load_image("images/menu.png"), (0, 0))
+
+class Menu:
+    def __init__(self, punkts=[0, 0, 'Punkt', (250, 250, 30), (250, 250, 30), 0]):
+        self.punkts = punkts
+        self.startlvl = False
+
+    def render(self, holst, font, num_punkt):
+        for i in self.punkts:
+            if num_punkt == i[5]:
+                holst.blit(font.render(i[2], 1, i[4]), (i[0], i[1]))
+            else:
+                holst.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
+
+    def menu(self):
+        done = True
+        font_menu = pygame.font.SysFont('Arial', 50)
+        punkt = 0
+        while done:
+            self.render(screenm, font_menu, punkt)
+
+            for e in pygame.event.get():
+                if e.type == pygame.QUIT:
+                    sys.exit()
+                if e.type == pygame.KEYDOWN:
+                    if e.key == pygame.K_ESCAPE:
+                        sys.exit()
+                    if e.key == pygame.K_UP:
+                        if punkt > 0:
+                            punkt -= 1
+                    if e.key == pygame.K_DOWN:
+                        if punkt < len(self.punkts) - 1:
+                            punkt += 1
+                    if e.key == pygame.K_RETURN:
+                        if punkt == 0:
+                            self.startlvl = True
+                            done = False
+                        elif punkt == 1:
+                            pass  # ВИДЕО-ОБУЧАЛКА
+                        elif punkt == 2:
+                            sys.exit()
+            screen.blit(screenm, (0, 0))
+            pygame.display.flip()
 
 
 class Raul(Sprite):
@@ -302,6 +350,7 @@ class Dima(Sprite):
         self.collide(self.xvel, 0, platforms)
         self.rect.y += self.yvel
         self.collide(0, self.yvel, platforms)
+
     def collide(self, xvel, yvel, platforms):
         for pl in platforms:
             if collide_rect(self, pl):
@@ -322,6 +371,8 @@ hero = Raul(5, 520)
 hero1 = Dima(1147, 520)
 leftP = rightP = upP = False
 leftP1 = rightP1 = upP1 = False
+bullets = []
+bullets1 = []
 
 sprite_group = pygame.sprite.Group()
 sprite_group.add(hero)
@@ -353,6 +404,7 @@ GRAVITY = 2
 speed = 10
 damage = 0
 damage1 = 0
+counter, text = 199, '199'.rjust(3)
 
 
 flshoot = True
@@ -361,6 +413,7 @@ kpshoot = 0
 flshoot1 = True
 kshoot1 = 0
 kpshoot1 = 0
+flhealth = False
 
 
 class Snaryad:
@@ -385,12 +438,20 @@ class Snaryad1:
         screen.blit(load_image("images/bullet1.png"), (self.x, self.y))
 
 
+punkts = [(470, 90, 'НОВЫЙ БОЙ', (128, 128, 128), (255, 255, 255), 0),
+          (485, 160, 'ОБУЧЕНИЕ', (128, 128, 128), (255, 255, 255), 1),
+          (522, 230, 'ВЫЙТИ', (128, 128, 128), (255, 255, 255), 2)]
+clock = pygame.time.Clock()
+pygame.time.set_timer(pygame.USEREVENT, 1000)
+font1 = pygame.font.SysFont('Consolas', 50)
+itemss = [(30, 290, 30, 30, "images/25HP.png", False, 10, 0),
+          (1140, 290, 30, 30, "images/25HP.png", False, 10, 1),
+          (30, 90, 30, 30, "images/50HP.png", False, 10, 2),
+          (1140, 90, 30, 30, "images/50HP.png", False, 10, 3)]
+
+
 def DrawWindow():
     screen.blit(load_image("images/level_1.png"), (0, 0))
-
-    # pygame.draw.rect(screen, (255, 0, 0), [35, 90, 30, 30])
-
-    # screen.blit(pygame.Rect(25, 10, 200, 20))
 
     for bullet in bullets:
         bullet.draw()
@@ -398,27 +459,55 @@ def DrawWindow():
     for bullet1 in bullets1:
         bullet1.draw()
 
-    screen.fill(pygame.Color('red'), pygame.Rect(25, 10, 200, 20))
-    screen.fill(pygame.Color('green'), pygame.Rect(25, 10, 200 - damage1, 20))
-    screen.fill(pygame.Color('red'), pygame.Rect(975, 10, 200, 20))
-    screen.fill(pygame.Color('green'), pygame.Rect(975 + damage, 10, 200 - damage, 20))
-
+    screen.blit(load_image("images/Raul/head.png"), (0, 5))
+    screen.blit(load_image("images/Dima/head.png"), (1170, 5))
+    screen.fill(pygame.Color('red'), pygame.Rect(35, 10, 200, 20))
+    screen.fill(pygame.Color('green'), pygame.Rect(35, 10, 200 - damage1, 20))
+    screen.fill(pygame.Color('red'), pygame.Rect(965, 10, 200, 20))
+    screen.fill(pygame.Color('green'), pygame.Rect(965 + damage, 10, 200 - damage, 20))
+    screen.blit(font1.render(text, True, (255, 0, 0)), (545, 10))
 
     sprite_group.draw(screen)
 
     pygame.display.flip()
 
 
-clock = pygame.time.Clock()
-bullets = []
-bullets1 = []
+punkts = [(470, 90, 'НОВЫЙ БОЙ', (128, 128, 128), (255, 255, 255), 0),
+          (485, 160, 'ОБУЧЕНИЕ', (128, 128, 128), (255, 255, 255), 1),
+          (522, 230, 'ВЫЙТИ', (128, 128, 128), (255, 255, 255), 2)]
+game = Menu(punkts)
+game.menu()
+
 running = True
 while running:
     clock.tick(30)
+    if game.startlvl:
+        sprite_group.remove(hero)
+        sprite_group.remove(hero1)
+        hero = Raul(5, 520)
+        hero1 = Dima(1147, 520)
+        sprite_group.add(hero)
+        sprite_group.add(hero1)
+        leftP = rightP = upP = False
+        leftP1 = rightP1 = upP1 = False
+        damage = 0
+        damage1 = 0
+        counter, text = 199, '199'.rjust(3)
+        bullets = []
+        bullets1 = []
+        game.startlvl = False
+        hero.update(leftP, rightP, upP, platfroms)
+        hero1.update(leftP1, rightP1, upP1, platfroms)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
+        if event.type == pygame.USEREVENT:
+            counter -= 1
+            if counter >= 0:
+                text = str(counter).rjust(3)
+            if counter == 0:
+                screenm.blit(load_image("images/menu.png"), (0, 0))
+                game.menu()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 leftP = True
@@ -470,7 +559,8 @@ while running:
         facing1 = 1
     elif hero1.viewSide == "l":
         facing1 = -1
-
+    if counter % 10 == 0:
+        flhealth = True
     for bullet1 in bullets1:
         if 1300 > bullet1.x > -100:
             bullet1.x += bullet1.vel1
