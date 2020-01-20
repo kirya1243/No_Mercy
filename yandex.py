@@ -6,7 +6,6 @@ from pygame import Surface
 from pygame.image import load
 from Platforms import PlatformMetal, PlatformStone, PlatformHidden
 
-
 pygame.mixer.init()
 # pygame.mixer_music.load('data/sounds/Black Magic.mp3')
 # pygame.mixer_music.load('data/sounds/Corrupted Keep.mp3')
@@ -107,6 +106,7 @@ sizem = 1200, 540
 screenm = pygame.display.set_mode(sizem)
 screenm.blit(load_image("images/menu.png"), (0, 0))
 
+
 class Menu:
     def __init__(self, punkts=[0, 0, 'Punkt', (250, 250, 30), (250, 250, 30), 0]):
         self.punkts = punkts
@@ -121,6 +121,8 @@ class Menu:
 
     def menu(self):
         done = True
+        pygame.mixer_music.load('data/sounds/menu.mp3')
+        pygame.mixer_music.play(-1)
         font_menu = pygame.font.SysFont('Arial', 50)
         punkt = 0
         while done:
@@ -140,11 +142,16 @@ class Menu:
                             punkt += 1
                     if e.key == pygame.K_RETURN:
                         if punkt == 0:
+                            sound_button_press_game.play()
+                            screen.blit(load_image("images/level_1.png"), (0, 0))
                             self.startlvl = True
                             done = False
                         elif punkt == 1:
+                            sound_button_press.play()
                             pass  # ВИДЕО-ОБУЧАЛКА
                         elif punkt == 2:
+                            sound_button_press.play()
+                            pygame.time.wait(600)
                             sys.exit()
             screen.blit(screenm, (0, 0))
             pygame.display.flip()
@@ -242,6 +249,7 @@ class Raul(Sprite):
         self.collide(self.xvel, 0, platforms)
         self.rect.y += self.yvel
         self.collide(0, self.yvel, platforms)
+
     def collide(self, xvel, yvel, platforms):
         for pl in platforms:
             if collide_rect(self, pl):
@@ -367,6 +375,28 @@ class Dima(Sprite):
                     self.yvel = 0
 
 
+sprite_group = pygame.sprite.Group()
+
+platforms = []
+x, y = 0, 0
+for row in load_level('level_1.txt'):
+    for col in row:
+        if col == '#':
+            pl = PlatformMetal(x, y)
+            sprite_group.add(pl)
+            platforms.append(pl)
+        elif col == '%':
+            pl = PlatformStone(x, y)
+            sprite_group.add(pl)
+            platforms.append(pl)
+        elif col == '0':
+            pl = PlatformHidden(x, y)
+            sprite_group.add(pl)
+            platforms.append(pl)
+        x += 20
+    y += 20
+    x = 0
+
 hero = Raul(5, 520)
 hero1 = Dima(1147, 520)
 leftP = rightP = upP = False
@@ -374,29 +404,8 @@ leftP1 = rightP1 = upP1 = False
 bullets = []
 bullets1 = []
 
-sprite_group = pygame.sprite.Group()
 sprite_group.add(hero)
 sprite_group.add(hero1)
-platfroms = []
-
-x, y = 0, 0
-for row in load_level('level_1.txt'):
-    for col in row:
-        if col == '#':
-            pl = PlatformMetal(x, y)
-            sprite_group.add(pl)
-            platfroms.append(pl)
-        elif col == '%':
-            pl = PlatformStone(x, y)
-            sprite_group.add(pl)
-            platfroms.append(pl)
-        elif col == '0':
-            pl = PlatformHidden(x, y)
-            sprite_group.add(pl)
-            platfroms.append(pl)
-        x += 20
-    y += 20
-    x = 0
 
 MOVE_SPEED = 10
 JUMP_POWER = 20
@@ -405,7 +414,6 @@ speed = 10
 damage = 0
 damage1 = 0
 counter, text = 199, '199'.rjust(3)
-
 
 flshoot = True
 kshoot = 0
@@ -482,22 +490,56 @@ running = True
 while running:
     clock.tick(30)
     if game.startlvl:
-        sprite_group.remove(hero)
-        sprite_group.remove(hero1)
+        pygame.mixer_music.load('data/sounds/Black Magic.mp3')
+        pygame.mixer_music.play()
+        sound_start_round.play()
+        sprite_group.empty()
+        kshoot, kshoot1 = 0, 0
+        screen.blit(load_image("images/level_1.png"), (0, 0))
+        delay_marker = 1
+        pygame.time.delay(10000)
+        delay_marker = 0
+        # screenm.fill((0, 0, 0))
+        sound_respawn.play()
+        # sprite_group.remove(hero)
+        # sprite_group.remove(hero1)
+
+        platforms = []
+        x, y = 0, 0
+        for row in load_level('level_1.txt'):
+            for col in row:
+                if col == '#':
+                    pl = PlatformMetal(x, y)
+                    sprite_group.add(pl)
+                    platforms.append(pl)
+                elif col == '%':
+                    pl = PlatformStone(x, y)
+                    sprite_group.add(pl)
+                    platforms.append(pl)
+                elif col == '0':
+                    pl = PlatformHidden(x, y)
+                    sprite_group.add(pl)
+                    platforms.append(pl)
+                x += 20
+            y += 20
+            x = 0
+
         hero = Raul(5, 520)
         hero1 = Dima(1147, 520)
         sprite_group.add(hero)
         sprite_group.add(hero1)
+
+        print([i for i in sprite_group])
         leftP = rightP = upP = False
         leftP1 = rightP1 = upP1 = False
         damage = 0
         damage1 = 0
-        counter, text = 199, '199'.rjust(3)
+        counter, text = 20, '20'.rjust(3)
         bullets = []
         bullets1 = []
         game.startlvl = False
-        hero.update(leftP, rightP, upP, platfroms)
-        hero1.update(leftP1, rightP1, upP1, platfroms)
+        hero.update(leftP, rightP, upP, platforms)
+        hero1.update(leftP1, rightP1, upP1, platforms)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -506,6 +548,8 @@ while running:
             if counter >= 0:
                 text = str(counter).rjust(3)
             if counter == 0:
+                sprite_group.empty()
+                screen.blit(load_image("images/level_1.png"), (0, 0))
                 screenm.blit(load_image("images/menu.png"), (0, 0))
                 game.menu()
         if event.type == pygame.KEYDOWN:
@@ -601,9 +645,10 @@ while running:
 
     kpshoot += 1
     kpshoot1 += 1
-    DrawWindow()
-    hero.update(leftP, rightP, upP, platfroms)
-    hero1.update(leftP1, rightP1, upP1, platfroms)
+    if not game.startlvl:
+        DrawWindow()
+    hero.update(leftP, rightP, upP, platforms)
+    hero1.update(leftP1, rightP1, upP1, platforms)
     for bullet in bullets:
         bullet.draw()
     for bullet in bullets1:
