@@ -99,13 +99,13 @@ def load_level(filename):
 pygame.init()
 size = 1200, 540
 screen = pygame.display.set_mode(size)
-screen.blit(load_image("images/level_1.png"), (0, 0))
+# screen.blit(load_image("images/level_1.png"), (0, 0))
 pygame.display.set_caption('SUPER KVEIK 2D')
 pygame.display.set_icon(pygame.image.load("data/images/icon.jpg"))
 
 sizem = 1200, 540
 screenm = pygame.display.set_mode(sizem)
-screenm.blit(load_image("images/menu.png"), (0, 0))
+
 
 class Menu:
     def __init__(self, punkts=[0, 0, 'Punkt', (250, 250, 30), (250, 250, 30), 0]):
@@ -140,14 +140,147 @@ class Menu:
                             punkt += 1
                     if e.key == pygame.K_RETURN:
                         if punkt == 0:
-                            self.startlvl = True
                             done = False
+                            screenm.blit(load_image("images/map.png"), (0, 0))
+                            level.levelf()
                         elif punkt == 1:
                             pass  # ВИДЕО-ОБУЧАЛКА
                         elif punkt == 2:
                             sys.exit()
             screen.blit(screenm, (0, 0))
             pygame.display.flip()
+
+
+punkts = [(465, 90, 'НАЧАТЬ БОЙ', (128, 128, 128), (255, 255, 255), 0),
+          (485, 160, 'ОБУЧЕНИЕ', (128, 128, 128), (255, 255, 255), 1),
+          (522, 230, 'ВЫЙТИ', (128, 128, 128), (255, 255, 255), 2)]
+game = Menu(punkts)
+
+
+class Level:
+    def __init__(self, punktsmap=[0, 0, 'Punkt', (250, 250, 30), (250, 250, 30), 0]):
+        self.punkts = punktsmap
+        self.startlvl = False
+        self.levelmap = ''
+
+    def render(self, holst, font, num_punkt):
+        for i in self.punkts:
+            if num_punkt == i[5]:
+                holst.blit(font.render(i[2], 1, i[4]), (i[0], i[1]))
+            else:
+                holst.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
+
+    def levelf(self):
+        done = True
+        karta1 = pygame.transform.scale(load_image("images/level_1.png"), (540, 243))
+        karta2 = pygame.transform.scale(load_image("images/level_2.png"), (540, 243))
+        screenm.blit(karta1, (40, 150))
+        screenm.blit(karta2, (620, 150))
+        font_text = pygame.font.SysFont('Arial', 30)
+        text1 = font_text.render("Царство чёрной магии", 1, (128, 128, 128))
+        screenm.blit(text1, (180, 410))
+        text1 = font_text.render("Измерение обречённых", 1, (128, 128, 128))
+        screenm.blit(text1, (750, 410))
+        font_menu = pygame.font.SysFont('Arial', 70)
+        punkt = 0
+        while done:
+            self.render(screenm, font_menu, punkt)
+
+            for e in pygame.event.get():
+                if e.type == pygame.QUIT:
+                    sys.exit()
+                if e.type == pygame.KEYDOWN:
+                    if e.key == pygame.K_ESCAPE:
+                        screenm.blit(load_image("images/menu.png"), (0, 0))
+                        game.menu()
+                        done = False
+                    if e.key == pygame.K_LEFT:
+                        if punkt > 0:
+                            punkt -= 1
+                    if e.key == pygame.K_RIGHT:
+                        if punkt < len(self.punkts) - 1:
+                            punkt += 1
+                    if e.key == pygame.K_RETURN:
+                        if punkt == 0:
+                            self.levelmap = 'level_1'
+                            self.startlvl = True
+                            done = False
+                        elif punkt == 1:
+                            self.levelmap = 'level_2'
+                            self.startlvl = True
+                            done = False
+            screen.blit(screenm, (0, 0))
+            pygame.display.flip()
+
+
+punktsmap = [[100, 30, 'The Longest Yard', (128, 128, 128), (255, 255, 255), 0],
+             [700, 30, 'Corrupted Keep', (128, 128, 128), (255, 255, 255), 1]]
+level = Level(punktsmap)
+
+sizep = 1200, 540
+screenp = pygame.display.set_mode(sizem)
+screenm.blit(load_image("images/menu.png"), (0, 0))
+
+
+class Pause:
+    def __init__(self, punktsp=[0, 0, 'Punkt', (250, 250, 30), (250, 250, 30), 0]):
+        self.punkts = punktsp
+        self.startlvl = False
+
+    def render(self, holst, font, num_punkt):
+        screenm.blit(load_image("images/menu.png"), (0, 0))
+        for i in self.punkts:
+            if num_punkt == i[5]:
+                holst.blit(font.render(i[2], 1, i[4]), (i[0], i[1]))
+            else:
+                holst.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
+
+    def pause(self):
+        done = True
+        game.startlvl = False
+        font_pause = pygame.font.SysFont('Arial', 50)
+        punkt = 0
+        i = punktsp[1]
+        while done:
+            self.render(screenp, font_pause, punkt)
+
+            for e in pygame.event.get():
+                if e.type == pygame.QUIT:
+                    sys.exit()
+                if e.type == pygame.KEYDOWN:
+                    if e.key == pygame.K_ESCAPE:
+                        done = False
+                    if e.key == pygame.K_UP:
+                        if punkt > 0:
+                            punkt -= 1
+                    if e.key == pygame.K_DOWN:
+                        if punkt < len(self.punkts) - 1:
+                            punkt += 1
+                    if e.key == pygame.K_RETURN:
+                        if punkt == 0:
+                            done = False
+                        elif punkt == 1:
+                            if len(i[2]) == 10:
+                                i[2] = 'МУЗЫКА ВЫКЛ'
+                                i[0] = 450
+                                self.render(screenp, font_pause, punkt)
+                            else:
+                                i[2] = 'МУЗЫКА ВКЛ'
+                                i[0] = 470
+                                self.render(screenp, font_pause, punkt)
+                        elif punkt == 2:
+                            screenm.blit(load_image("images/menu.png"), (0, 0))
+                            game.startlvl = True
+                            game.menu()
+                            done = False
+            screen.blit(screenp, (0, 0))
+            pygame.display.flip()
+
+
+punktsp = [[455, 80, 'ПРОДОЛЖИТЬ', (128, 128, 128), (255, 255, 255), 0],
+          [470, 150, 'МУЗЫКА ВКЛ', (128, 128, 128), (255, 255, 255), 1],
+          [439, 220, 'ПОКИНУТЬ БОЙ', (128, 128, 128), (255, 255, 255), 2]]
+pause = Pause(punktsp)
 
 
 class Raul(Sprite):
@@ -233,7 +366,7 @@ class Raul(Sprite):
         if not self.onGround:
             self.yvel += GRAVITY
         self.onGround = False
-        if self.rect.x + self.xvel > 0 and self.rect.x + self.xvel < 1152:
+        if not (not (self.rect.x + self.xvel > 0) or not (1152 > self.rect.x + self.xvel)):
             self.rect.x += self.xvel
         elif self.rect.x <= 10:
             self.rect.x = 0
@@ -242,32 +375,33 @@ class Raul(Sprite):
         self.collide(self.xvel, 0, platforms)
         self.rect.y += self.yvel
         self.collide(0, self.yvel, platforms)
+
     def collide(self, xvel, yvel, platforms):
-        for pl in platforms:
-            if collide_rect(self, pl):
+        for pl1 in platforms:
+            if collide_rect(self, pl1):
                 if xvel > 0:
-                    self.rect.right = pl.rect.left
+                    self.rect.right = pl1.rect.left
                 if xvel < 0:
-                    self.rect.left = pl.rect.right
+                    self.rect.left = pl1.rect.right
                 if yvel > 0:
-                    self.rect.bottom = pl.rect.top
+                    self.rect.bottom = pl1.rect.top
                     self.onGround = True
                     self.yvel = 0
                 if yvel < 0:
-                    self.rect.top = pl.rect.bottom
+                    self.rect.top = pl1.rect.bottom
                     self.yvel = 0
 
 
 class Dima(Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x1, y1):
         Sprite.__init__(self)
         self.image = Surface((48, 80))
         self.image = load("data/images/Dima/rifle/Dima_l0.png").convert_alpha()
         self.xvel = 0
         self.yvel = 0
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = x1
+        self.rect.y = y1
         self.onGround = False
         self.stay = True
         self.viewSide = 'l'
@@ -341,7 +475,7 @@ class Dima(Sprite):
         if not self.onGround:
             self.yvel += GRAVITY
         self.onGround = False
-        if self.rect.x + self.xvel > 0 and self.rect.x + self.xvel < 1152:
+        if not (not (self.rect.x + self.xvel > 0) or not (1152 > self.rect.x + self.xvel)):
             self.rect.x += self.xvel
         elif self.rect.x <= 10:
             self.rect.x = 0
@@ -352,18 +486,18 @@ class Dima(Sprite):
         self.collide(0, self.yvel, platforms)
 
     def collide(self, xvel, yvel, platforms):
-        for pl in platforms:
-            if collide_rect(self, pl):
+        for pl1 in platforms:
+            if collide_rect(self, pl1):
                 if xvel > 0:
-                    self.rect.right = pl.rect.left
+                    self.rect.right = pl1.rect.left
                 if xvel < 0:
-                    self.rect.left = pl.rect.right
+                    self.rect.left = pl1.rect.right
                 if yvel > 0:
-                    self.rect.bottom = pl.rect.top
+                    self.rect.bottom = pl1.rect.top
                     self.onGround = True
                     self.yvel = 0
                 if yvel < 0:
-                    self.rect.top = pl.rect.bottom
+                    self.rect.top = pl1.rect.bottom
                     self.yvel = 0
 
 
@@ -379,24 +513,6 @@ sprite_group.add(hero)
 sprite_group.add(hero1)
 platfroms = []
 
-x, y = 0, 0
-for row in load_level('level_1.txt'):
-    for col in row:
-        if col == '#':
-            pl = PlatformMetal(x, y)
-            sprite_group.add(pl)
-            platfroms.append(pl)
-        elif col == '%':
-            pl = PlatformStone(x, y)
-            sprite_group.add(pl)
-            platfroms.append(pl)
-        elif col == '0':
-            pl = PlatformHidden(x, y)
-            sprite_group.add(pl)
-            platfroms.append(pl)
-        x += 20
-    y += 20
-    x = 0
 
 MOVE_SPEED = 10
 JUMP_POWER = 20
@@ -417,22 +533,22 @@ flhealth = False
 
 
 class Snaryad:
-    def __init__(self, x, y, facing):
-        self.x = x
-        self.y = y
-        self.facing = facing
-        self.vel = 30 * facing
+    def __init__(self, x1, y1, facing0):
+        self.x = x1
+        self.y = y1
+        self.facing = facing0
+        self.vel = 30 * facing0
 
     def draw(self):
         screen.blit(load_image("images/bullet.png"), (self.x, self.y))
 
 
 class Snaryad1:
-    def __init__(self, x, y, facing1):
-        self.x = x
-        self.y = y
-        self.facing1 = facing1
-        self.vel1 = 30 * facing1
+    def __init__(self, x1, y1, facing2):
+        self.x = x1
+        self.y = y1
+        self.facing1 = facing2
+        self.vel1 = 30 * facing2
 
     def draw(self):
         screen.blit(load_image("images/bullet1.png"), (self.x, self.y))
@@ -451,7 +567,7 @@ itemss = [(30, 290, 30, 30, "images/25HP.png", False, 10, 0),
 
 
 def DrawWindow():
-    screen.blit(load_image("images/level_1.png"), (0, 0))
+    screen.blit(load_image('images/' + level.levelmap + '.png'), (0, 0))
 
     for bullet in bullets:
         bullet.draw()
@@ -472,18 +588,54 @@ def DrawWindow():
     pygame.display.flip()
 
 
-punkts = [(470, 90, 'НОВЫЙ БОЙ', (128, 128, 128), (255, 255, 255), 0),
-          (485, 160, 'ОБУЧЕНИЕ', (128, 128, 128), (255, 255, 255), 1),
-          (522, 230, 'ВЫЙТИ', (128, 128, 128), (255, 255, 255), 2)]
-game = Menu(punkts)
+
 game.menu()
+x, y = 0, 0
+for row in load_level(level.levelmap + '.txt'):
+    for col in row:
+        if col == '#':
+            pl = PlatformMetal(x, y)
+            sprite_group.add(pl)
+            platfroms.append(pl)
+        elif col == '%':
+            print(1)
+            pl = PlatformStone(x, y)
+            sprite_group.add(pl)
+            platfroms.append(pl)
+        elif col == '0':
+            pl = PlatformHidden(x, y)
+            sprite_group.add(pl)
+            platfroms.append(pl)
+        x += 20
+    y += 20
+    x = 0
+
 
 running = True
 while running:
     clock.tick(30)
     if game.startlvl:
-        sprite_group.remove(hero)
-        sprite_group.remove(hero1)
+        sprite_group.empty()
+        platfroms = []
+        x, y = 0, 0
+        for row in load_level(level.levelmap + '.txt'):
+            for col in row:
+                if col == '#':
+                    pl = PlatformMetal(x, y)
+                    sprite_group.add(pl)
+                    platfroms.append(pl)
+                elif col == '%':
+                    print(1)
+                    pl = PlatformStone(x, y)
+                    sprite_group.add(pl)
+                    platfroms.append(pl)
+                elif col == '0':
+                    pl = PlatformHidden(x, y)
+                    sprite_group.add(pl)
+                    platfroms.append(pl)
+                x += 20
+            y += 20
+            x = 0
         hero = Raul(5, 520)
         hero1 = Dima(1147, 520)
         sprite_group.add(hero)
@@ -509,6 +661,11 @@ while running:
                 screenm.blit(load_image("images/menu.png"), (0, 0))
                 game.menu()
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                screenm.blit(load_image("images/menu.png"), (0, 0))
+                pause.pause()
+            if event.key == pygame.K_a:
+                leftP = True
             if event.key == pygame.K_a:
                 leftP = True
             if event.key == pygame.K_d:
