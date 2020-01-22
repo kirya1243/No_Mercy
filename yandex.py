@@ -37,8 +37,8 @@ sound_start_round.set_volume(1)
 
 # sound_beg = pygame.mixer.Sound('data/sounds/hero/beg.wav')
 # sound_beg.set_volume(1)
-# sound_change_weapon = pygame.mixer.Sound('data/sounds/hero/change_weapon.wav')
-# sound_change_weapon.set_volume(1)
+sound_change_weapon = pygame.mixer.Sound('data/sounds/hero/change_weapon.wav')
+sound_change_weapon.set_volume(1)
 # sound_death = pygame.mixer.Sound('data/sounds/hero/death.wav')
 # sound_death.set_volume(1)
 sound_hit = pygame.mixer.Sound('data/sounds/hero/hit.wav')
@@ -47,40 +47,38 @@ sound_hit.set_volume(0.3)
 # sound_jump_down.set_volume(1)
 # sound_jump_up = pygame.mixer.Sound('data/sounds/hero/jump_up.wav')
 # sound_jump_up.set_volume(1)
-# sound_railgun_shot = pygame.mixer.Sound('data/sounds/hero/railgun_shot.wav')
-# sound_railgun_shot.set_volume(0.3)
+sound_railgun_shot = pygame.mixer.Sound('data/sounds/hero/railgun_shot.wav')
+sound_railgun_shot.set_volume(0.3)
+print(sound_railgun_shot.get_length())
 sound_respawn = pygame.mixer.Sound('data/sounds/hero/respawn.wav')
 sound_respawn.set_volume(1)
 sound_rifle_shot = pygame.mixer.Sound('data/sounds/hero/rifle_shot.wav')
-# sound_rifle_shot = pygame.mixer.Sound('data/sounds/hero/railgun_shot.wav')
 sound_rifle_shot.set_volume(0.3)
 
-# sound_gain_end = pygame.mixer.Sound('data/sounds/items/gain_end.wav')
-# sound_gain_end.set_volume(1)
-# sound_health_25_get = pygame.mixer.Sound('data/sounds/items/health_25_get.wav')
-# sound_health_25_get.set_volume(1)
+sound_gain_end = pygame.mixer.Sound('data/sounds/items/gain_end.wav')
+sound_gain_end.set_volume(1)
+sound_health_25_get = pygame.mixer.Sound('data/sounds/items/health_25_get.wav')
+sound_health_25_get.set_volume(1)
 sound_health_25_spawn = pygame.mixer.Sound('data/sounds/items/health_25_spawn.wav')
 sound_health_25_spawn.set_volume(1)
-# sound_health_50_get = pygame.mixer.Sound('data/sounds/items/health_50_get.wav')
-# sound_health_50_get.set_volume(1)
+sound_health_50_get = pygame.mixer.Sound('data/sounds/items/health_50_get.wav')
+sound_health_50_get.set_volume(1)
 sound_health_50_spawn = pygame.mixer.Sound('data/sounds/items/health_50_spawn.wav')
 sound_health_50_spawn.set_volume(1)
-# sound_health_ = pygame.mixer.Sound('data/sounds/items/health_spawn.wav')
-# sound_health_.set_volume(1)
-# sound_protection_get = pygame.mixer.Sound('data/sounds/items/protection_get.wav')
-# sound_protection_get.set_volume(1)
+sound_protection_get = pygame.mixer.Sound('data/sounds/items/protection_get.wav')
+sound_protection_get.set_volume(1)
 sound_protection_soon = pygame.mixer.Sound('data/sounds/items/protection_soon.wav')
 sound_protection_soon.set_volume(1)
 sound_protection_spawn = pygame.mixer.Sound('data/sounds/items/protection_spawn.wav')
 sound_protection_spawn.set_volume(1)
-# sound_quad_get = pygame.mixer.Sound('data/sounds/items/quad_get.wav')
-# sound_quad_get.set_volume(1)
+sound_quad_get = pygame.mixer.Sound('data/sounds/items/quad_get.wav')
+sound_quad_get.set_volume(1)
 sound_quad_soon = pygame.mixer.Sound('data/sounds/items/quad_soon.wav')
 sound_quad_soon.set_volume(1)
 sound_quad_spawn = pygame.mixer.Sound('data/sounds/items/quad_spawn.wav')
 sound_quad_spawn.set_volume(1)
-# sound_weapon_get = pygame.mixer.Sound('data/sounds/items/weapon_get.wav')
-# sound_weapon_get.set_volume(1)
+sound_weapon_get = pygame.mixer.Sound('data/sounds/items/weapon_get.wav')
+sound_weapon_get.set_volume(1)
 sound_weapon_spawn = pygame.mixer.Sound('data/sounds/items/weapon_spawn.wav')
 sound_weapon_spawn.set_volume(1)
 
@@ -401,6 +399,9 @@ punktsp = [[455, 80, 'ПРОДОЛЖИТЬ', (128, 128, 128), (255, 255, 255), 0
            [439, 220, 'ПОКИНУТЬ БОЙ', (128, 128, 128), (255, 255, 255), 2]]
 pause = Pause(punktsp)
 
+weapons = ['RIFLE']
+weapons1 = ['RIFLE']
+
 
 class Raul(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -439,12 +440,20 @@ class Raul(pygame.sprite.Sprite):
                 self.sChMarker = 1
             else:
                 self.sChMarker += 1
-            if self.viewSide == 'l' and self.sChMarker == 1:
+            if (self.viewSide == 'l' and self.sChMarker == 1) and weapons[0] == 'RIFLE':
                 self.image = pygame.image.load("data/images/Raul/rifle/" + self.stayL[0]).convert_alpha()
                 self.stayL.insert(6, self.stayL[0])
                 del self.stayL[0]
-            elif self.viewSide == 'r' and self.sChMarker == 1:
+            elif (self.viewSide == 'l' and self.sChMarker == 1) and weapons[0] == 'RAIL':
+                self.image = pygame.image.load("data/images/Raul/railgun/" + self.stayL[0]).convert_alpha()
+                self.stayL.insert(6, self.stayL[0])
+                del self.stayL[0]
+            elif (self.viewSide == 'r' and self.sChMarker == 1) and weapons[0] == 'RIFLE':
                 self.image = pygame.image.load("data/images/Raul/rifle/" + self.stayR[0]).convert_alpha()
+                self.stayR.insert(6, self.stayR[0])
+                del self.stayR[0]
+            elif (self.viewSide == 'r' and self.sChMarker == 1) and weapons[0] == 'RAIL':
+                self.image = pygame.image.load("data/images/Raul/railgun/" + self.stayR[0]).convert_alpha()
                 self.stayR.insert(6, self.stayR[0])
                 del self.stayR[0]
         else:
@@ -454,7 +463,10 @@ class Raul(pygame.sprite.Sprite):
             if self.viewSide == 'l':
                 self.rChMarker = 1
                 if self.lChMarker == 1:
-                    self.image = pygame.image.load("data/images/Raul/rifle/" + self.begL[0]).convert_alpha()
+                    if weapons[0] == 'RIFLE':
+                        self.image = pygame.image.load("data/images/Raul/rifle/" + self.begL[0]).convert_alpha()
+                    else:
+                        self.image = pygame.image.load("data/images/Raul/railgun/" + self.begL[0]).convert_alpha()
                     self.begL.insert(4, self.begL[0])
                     del self.begL[0]
                 if self.lChMarker == 4:
@@ -464,7 +476,10 @@ class Raul(pygame.sprite.Sprite):
             elif self.viewSide == 'r':
                 self.lChMarker = 1
                 if self.rChMarker == 1:
-                    self.image = pygame.image.load("data/images/Raul/rifle/" + self.begR[0]).convert_alpha()
+                    if weapons[0] == 'RIFLE':
+                        self.image = pygame.image.load("data/images/Raul/rifle/" + self.begR[0]).convert_alpha()
+                    else:
+                        self.image = pygame.image.load("data/images/Raul/railgun/" + self.begR[0]).convert_alpha()
                     self.begR.insert(4, self.begR[0])
                     del self.begR[0]
                 if self.rChMarker == 4:
@@ -552,12 +567,20 @@ class Dima(pygame.sprite.Sprite):
                 self.sChMarker = 1
             else:
                 self.sChMarker += 1
-            if self.viewSide == 'l' and self.sChMarker == 1:
+            if (self.viewSide == 'l' and self.sChMarker == 1) and weapons1[0] == 'RIFLE':
                 self.image = pygame.image.load("data/images/Dima/rifle/" + self.stayL[0]).convert_alpha()
                 self.stayL.insert(6, self.stayL[0])
                 del self.stayL[0]
-            elif self.viewSide == 'r' and self.sChMarker == 1:
+            elif (self.viewSide == 'l' and self.sChMarker == 1) and weapons1[0] == 'RAIL':
+                self.image = pygame.image.load("data/images/Dima/railgun/" + self.stayL[0]).convert_alpha()
+                self.stayL.insert(6, self.stayL[0])
+                del self.stayL[0]
+            elif (self.viewSide == 'r' and self.sChMarker == 1) and weapons1[0] == 'RIFLE':
                 self.image = pygame.image.load("data/images/Dima/rifle/" + self.stayR[0]).convert_alpha()
+                self.stayR.insert(6, self.stayR[0])
+                del self.stayR[0]
+            elif (self.viewSide == 'r' and self.sChMarker == 1) and weapons1[0] == 'RAIL':
+                self.image = pygame.image.load("data/images/Dima/railgun/" + self.stayR[0]).convert_alpha()
                 self.stayR.insert(6, self.stayR[0])
                 del self.stayR[0]
         else:
@@ -567,7 +590,10 @@ class Dima(pygame.sprite.Sprite):
             if self.viewSide == 'l':
                 self.rChMarker = 1
                 if self.lChMarker == 1:
-                    self.image = pygame.image.load("data/images/Dima/rifle/" + self.begL[0]).convert_alpha()
+                    if weapons1[0] == 'RIFLE':
+                        self.image = pygame.image.load("data/images/Dima/rifle/" + self.begL[0]).convert_alpha()
+                    else:
+                        self.image = pygame.image.load("data/images/Dima/railgun/" + self.begL[0]).convert_alpha()
                     self.begL.insert(4, self.begL[0])
                     del self.begL[0]
                 if self.lChMarker == 4:
@@ -577,7 +603,10 @@ class Dima(pygame.sprite.Sprite):
             elif self.viewSide == 'r':
                 self.lChMarker = 1
                 if self.rChMarker == 1:
-                    self.image = pygame.image.load("data/images/Dima/rifle/" + self.begR[0]).convert_alpha()
+                    if weapons1[0] == 'RIFLE':
+                        self.image = pygame.image.load("data/images/Dima/rifle/" + self.begR[0]).convert_alpha()
+                    else:
+                        self.image = pygame.image.load("data/images/Dima/railgun/" + self.begR[0]).convert_alpha()
                     self.begR.insert(4, self.begR[0])
                     del self.begR[0]
                 if self.rChMarker == 4:
@@ -628,6 +657,8 @@ hero = Raul(5, 520)
 hero1 = Dima(1147, 520)
 leftP = rightP = upP = False
 leftP1 = rightP1 = upP1 = False
+gains = []
+gains1 = []
 bullets = []
 bullets1 = []
 
@@ -647,9 +678,11 @@ counter, text = 180, '3:00'.rjust(3)
 flshoot = True
 kshoot = 0
 kpshoot = 0
+railshoot = 0
 flshoot1 = True
 kshoot1 = 0
 kpshoot1 = 0
+railshoot1 = 0
 flhealth = False
 
 
@@ -675,6 +708,17 @@ class Snaryad1:
         screen.blit(load_image("images/bullet1.png"), (self.x, self.y))
 
 
+class SnaryadRail:
+    def __init__(self, x1, y1, facing0):
+        self.x = x1
+        self.y = y1
+        self.facing = facing0
+        self.vel = 70 * facing0
+
+    def draw(self):
+        screen.blit(load_image("images/bullet_rail.png"), (self.x, self.y))
+
+
 punkts = [(470, 90, 'НОВЫЙ БОЙ', (128, 128, 128), (255, 255, 255), 0),
           (485, 160, 'ОБУЧЕНИЕ', (128, 128, 128), (255, 255, 255), 1),
           (522, 230, 'ВЫЙТИ', (128, 128, 128), (255, 255, 255), 2)]
@@ -689,6 +733,7 @@ font3 = pygame.font.SysFont('Consolas', 25)
 #           [1140, 90, 30, 30, "images/50HP.png", False, 10, 3]]
 itemss = []
 spawns = []
+railshot_draw = []
 
 
 def DrawWindow():
@@ -726,6 +771,32 @@ def DrawWindow():
     # screen.blit(load_image("images/spawn.png"), (1137, 500))
     for i in spawns:
         screen.blit(load_image('images/spawn.png'), (i[0], i[1]))
+
+    if len(gains) > 0:
+        for i in gains:
+            if i[0] == 'QUAD':
+                gain = pygame.transform.scale(load_image("images/quad.png"), (20, 20))
+            else:
+                gain = pygame.transform.scale(load_image("images/protection.png"), (20, 20))
+            screen.blit(gain, (240, 10))
+            screen.blit(font3.render(str(i[1]), True, (255, 255, 255)), (265, 8))
+
+    if len(gains1) > 0:
+        for i in gains1:
+            if i[0] == 'QUAD':
+                gain = pygame.transform.scale(load_image("images/quad.png"), (20, 20))
+            else:
+                gain = pygame.transform.scale(load_image("images/protection.png"), (20, 20))
+            screen.blit(gain, (905, 10))
+            screen.blit(font3.render(str(i[1]), True, (255, 255, 255)), (930, 8))
+
+    if len(railshot_draw) > 0:
+        for i in railshot_draw:
+            if i[2] > 0:
+                if i[1] == -1:
+                    pygame.draw.line(screen, (136, 6, 206), (0, i[3]), (i[0], i[3]), 5)
+                elif i[1] == 1:
+                    pygame.draw.line(screen, (136, 6, 206), (i[0], i[3]), (1200, i[3]), 5)
 
     sprite_group.draw(screen)
 
@@ -848,8 +919,13 @@ while running:
         hp1 = 200
         hp = 200
         counter, text = 180, '3:00'.rjust(3)
+        weapons = ['RIFLE']
+        weapons1 = ['RIFLE']
+        gains = []
+        gains1 = []
         bullets = []
         bullets1 = []
+        railshot_draw = []
         game.startlvl = False
         hero.update(leftP, rightP, upP, platforms)
         hero1.update(leftP1, rightP1, upP1, platforms)
@@ -883,7 +959,25 @@ while running:
                 # elif col == 'g':
                 #     itemss.append([x, y - 20, 41, 16, "images/rifle_r.png", False, 80, 'GAIN'])
                 if counter >= 0:
-
+                    if len(gains) > 0:
+                        for i in gains:
+                            i[1] -= 1
+                            if i[1] == 10:
+                                sound_gain_end.play()
+                            if i[1] == 0:
+                                gains.remove(i)
+                    if len(gains1) > 0:
+                        for i in gains1:
+                            i[1] -= 1
+                            if i[1] == 10:
+                                sound_gain_end.play()
+                            if i[1] == 0:
+                                gains1.remove(i)
+                    if len(railshot_draw) > 0:
+                        for i in railshot_draw:
+                            i[2] -= 1
+                            if i[2] == 0:
+                                railshot_draw.remove(i)
                     for i in itemss:
                         if not i[5] and i[7] != 'GAIN':
                             i[6] -= 1
@@ -893,7 +987,7 @@ while running:
                                     i[6] = 30
                                     sound_health_50_spawn.play()
                                 elif i[7] == '25HP':
-                                    i[6] = 20
+                                    i[6] = 15
                                     sound_health_25_spawn.play()
                                 elif i[7] == 'RAIL':
                                     i[6] = 40
@@ -916,13 +1010,10 @@ while running:
                                 i[5] = False
                                 if i[8] == 'QUAD':
                                     i[8] = 'PROT'
-                                    # i[4] = 'images/rifle_l.png'
                                     i[4] = 'images/protection.png'
                                 else:
                                     i[8] = 'QUAD'
-                                    # i[4] = 'images/rifle_r.png'
                                     i[4] = 'images/quad.png'
-
                     seconds = counter
                     minutes = 0
                     while seconds >= 60:
@@ -936,15 +1027,87 @@ while running:
                         sound_5_min.play()
                     # if round_time == '1:00':
                     #     sound_1_min.play()
+                    if railshoot != 0:
+                        railshoot -= 1
+                    if railshoot1 != 0:
+                        railshoot1 -= 1
+                    if hp < 0:
+                        hp = 0
+                    if hp1 < 0:
+                        hp1 = 0
 
                 if counter == 0:
                     pygame.mixer_music.stop()
+                    # sound_1_min.stop() НЕТ ЕЩЁ
+                    sound_5_min.stop()
+                    sound_button_press.stop()
+                    sound_button_press_game.stop()
+                    sound_button_press_map.stop()
+                    sound_start_game.stop()
+                    # sound_end_round.stop() НЕТ ЕЩЁ
+                    sound_start_round.stop()
+                    # sound_beg.stop()
+                    sound_change_weapon.stop()
+                    # sound_death.stop()
+                    sound_hit.stop()
+                    # sound_jump_down.stop()
+                    # sound_jump_up.stop()
+                    # sound_railgun_shot.stop()
+                    sound_respawn.stop()
+                    sound_rifle_shot.stop()
+                    sound_gain_end.stop()
+                    sound_health_25_get.stop()
+                    sound_health_25_spawn.stop()
+                    sound_health_50_get.stop()
+                    sound_health_50_spawn.stop()
+                    sound_protection_get.stop()
+                    sound_protection_soon.stop()
+                    sound_protection_spawn.stop()
+                    sound_quad_get.stop()
+                    sound_quad_soon.stop()
+                    sound_quad_spawn.stop()
+                    sound_weapon_get.stop()
+                    sound_weapon_spawn.stop()
                     screenm.blit(load_image("images/menu.png"), (0, 0))
                     game.menu()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    # sound_1_min.stop() НЕТ ЕЩЁ
+                    sound_5_min.stop()
+                    sound_button_press.stop()
+                    sound_button_press_game.stop()
+                    sound_button_press_map.stop()
+                    sound_start_game.stop()
+                    # sound_end_round.stop() НЕТ ЕЩЁ
+                    sound_start_round.stop()
+                    # sound_beg.stop()
+                    sound_change_weapon.stop()
+                    # sound_death.stop()
+                    sound_hit.stop()
+                    # sound_jump_down.stop()
+                    # sound_jump_up.stop()
+                    # sound_railgun_shot.stop()
+                    sound_respawn.stop()
+                    sound_rifle_shot.stop()
+                    sound_gain_end.stop()
+                    sound_health_25_get.stop()
+                    sound_health_25_spawn.stop()
+                    sound_health_50_get.stop()
+                    sound_health_50_spawn.stop()
+                    sound_protection_get.stop()
+                    sound_protection_soon.stop()
+                    sound_protection_spawn.stop()
+                    sound_quad_get.stop()
+                    sound_quad_soon.stop()
+                    sound_quad_spawn.stop()
+                    sound_weapon_get.stop()
+                    sound_weapon_spawn.stop()
                     screenm.blit(load_image("images/menu.png"), (0, 0))
                     pause.pause()
+                if event.key == pygame.K_e:
+                    if len(weapons) > 1:
+                        sound_change_weapon.play()
+                        weapons.reverse()
                 if event.key == pygame.K_a:
                     leftP = True
                 if event.key == pygame.K_d:
@@ -957,6 +1120,10 @@ while running:
                     rightP1 = True
                 if event.key == pygame.K_UP:
                     upP1 = True
+                if event.key == pygame.K_KP1:
+                    if len(weapons1) > 1:
+                        sound_change_weapon.play()
+                        weapons1.reverse()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
                     leftP = False
@@ -973,16 +1140,57 @@ while running:
 
         for bullet in bullets:
             if 1300 > bullet.x > -100:
-                bullet.x += bullet.vel
+                if bullet.__class__.__name__ != 'SnaryadRail':
+                    bullet.x += bullet.vel
             else:
                 bullets.pop(bullets.index(bullet))
 
-            if hero1.rect.x + 48 >= bullet.x >= hero1.rect.x and hero1.rect.y + 80 >= bullet.y >= hero1.rect.y:
-                sound_hit.play()
-                hp1 -= 5
+            if bullet.__class__.__name__ != 'SnaryadRail':
+                if hero1.rect.x + 48 >= bullet.x >= hero1.rect.x and hero1.rect.y + 80 >= bullet.y >= hero1.rect.y:
+                    sound_hit.play()
+                    damage = 6
+                    if len(gains) > 0:
+                        for i in gains:
+                            if i[0] == 'QUAD':
+                                damage = damage * 4
+                    if len(gains1) > 0:
+                        for i in gains1:
+                            if i[0] == 'PROT':
+                                damage = damage // 3
+                    if str(hp1 - damage)[0] == '-':
+                        hp1 = 0
+                    else:
+                        hp1 -= damage
+                    bullets.pop(bullets.index(bullet))
+            else:
+                do_hit = 0
+                if bullet.facing == -1:
+                    for i in range(-100, bullet.x):
+                        if hero1.rect.x == i and hero1.rect.y + 80 >= bullet.y >= hero1.rect.y:
+                            do_hit = 1
+                elif bullet.facing == 1:
+                    for i in range(bullet.x, 1300):
+                        if hero1.rect.x == i and hero1.rect.y + 80 >= bullet.y >= hero1.rect.y:
+                            do_hit = 1
+                if do_hit == 1:
+                    sound_hit.play()
+                    damage = 69
+                    if len(gains) > 0:
+                        for i in gains:
+                            if i[0] == 'QUAD':
+                                damage = damage * 4
+                    if len(gains1) > 0:
+                        for i in gains1:
+                            if i[0] == 'PROT':
+                                damage = damage // 3
+                    if str(hp1 - damage)[0] == '-':
+                        hp1 = 0
+                    else:
+                        hp1 -= damage
                 bullets.pop(bullets.index(bullet))
+                railshot_draw.append([bullet.x, bullet.facing, 2, bullet.y])
 
-        if kshoot == 10:
+        if kshoot == 7:
             flshoot = False
             kpshoot = 0
             kshoot = 0
@@ -998,45 +1206,180 @@ while running:
             facing1 = -1
         if counter % 10 == 0:
             flhealth = True
+
         for bullet1 in bullets1:
             if 1300 > bullet1.x > -100:
-                bullet1.x += bullet1.vel1
+                if bullet1.__class__.__name__ != 'SnaryadRail':
+                    bullet1.x += bullet1.vel1
+                # elif bullet1.__class__.__name__ == 'SnaryadRail':
+                #     bullet1.x += bullet1.vel
             else:
                 bullets1.pop(bullets1.index(bullet1))
 
-            if hero.rect.x + 48 >= bullet1.x >= hero.rect.x and hero.rect.y + 80 >= bullet1.y >= hero.rect.y:
-                sound_hit.play()
-                hp -= 5
+            if bullet1.__class__.__name__ != 'SnaryadRail':
+                if hero.rect.x + 48 >= bullet1.x >= hero.rect.x and hero.rect.y + 80 >= bullet1.y >= hero.rect.y:
+                    sound_hit.play()
+                    damage = 6
+                    if len(gains1) > 0:
+                        for i in gains1:
+                            if i[0] == 'QUAD':
+                                damage = damage * 4
+                    if len(gains) > 0:
+                        for i in gains:
+                            if i[0] == 'PROT':
+                                damage = damage // 3
+                    if str(hp - damage)[0] == '-':
+                        hp = 0
+                    else:
+                        hp -= damage
+                    bullets1.pop(bullets1.index(bullet1))
+            else:
+                do_hit = 0
+                if bullet1.facing == -1:
+                    for i in range(-100, bullet1.x):
+                        if hero.rect.x == i and hero.rect.y + 80 >= bullet1.y >= hero.rect.y:
+                            do_hit = 1
+                elif bullet1.facing == 1:
+                    for i in range(bullet1.x, 1300):
+                        if hero.rect.x == i and hero.rect.y + 80 >= bullet1.y >= hero.rect.y:
+                            do_hit = 1
+                if do_hit == 1:
+                    sound_hit.play()
+                    damage = 69
+                    if len(gains1) > 0:
+                        for i in gains1:
+                            if i[0] == 'QUAD':
+                                damage = damage * 4
+                    if len(gains) > 0:
+                        for i in gains:
+                            if i[0] == 'PROT':
+                                damage = damage // 3
+                    if str(hp - damage)[0] == '-':
+                        hp = 0
+                    else:
+                        hp -= damage
                 bullets1.pop(bullets1.index(bullet1))
+                railshot_draw.append([bullet1.x, bullet1.facing, 2, bullet1.y])
 
-        if kshoot1 == 10:
+        if kshoot1 == 7:
             flshoot1 = False
             kpshoot1 = 0
             kshoot1 = 0
         if kpshoot1 == 30:
             flshoot1 = True
 
+        for item in itemss:
+            if (hero.rect.x + 48 >= item[0] >= hero.rect.x and hero.rect.y + 80 >= item[1] >= hero.rect.y) and item[5]:
+                if item[7] == '25HP':
+                    if hp <= 175:
+                        sound_health_25_get.play()
+                        hp += 25
+                        item[5] = False
+                    elif hp < 200 and hp > 175:
+                        sound_health_25_get.play()
+                        hp = 200
+                        item[5] = False
+                elif item[7] == '50HP':
+                    if hp <= 150:
+                        sound_health_50_get.play()
+                        hp += 50
+                        item[5] = False
+                    elif hp < 200 and hp > 150:
+                        sound_health_50_get.play()
+                        hp = 200
+                        item[5] = False
+                elif item[7] == 'RAIL':
+                    if len(weapons) == 1:
+                        sound_weapon_get.play()
+                        weapons.append('RAIL')
+                        item[5] = False
+                elif item[7] == 'GAIN':
+                    if item[8] == 'QUAD':
+                        sound_quad_get.play()
+                        gains.append(['QUAD', 30])
+                        item[5] = False
+                    elif item[8] == 'PROT':
+                        sound_protection_get.play()
+                        gains.append(['PROT', 30])
+                        item[5] = False
+
+            elif (hero1.rect.x + 48 >= item[0] >= hero1.rect.x and hero1.rect.y + 80 >= item[1] >= hero1.rect.y) and item[5]:
+                if item[7] == '25HP':
+                    if hp1 <= 175:
+                        sound_health_25_get.play()
+                        hp1 += 25
+                        item[5] = False
+                    elif hp1 < 200 and hp1 > 175:
+                        sound_health_25_get.play()
+                        hp1 = 200
+                        item[5] = False
+                elif item[7] == '50HP':
+                    if hp1 <= 150:
+                        sound_health_50_get.play()
+                        hp1 += 50
+                        item[5] = False
+                    elif hp1 < 200 and hp1 > 150:
+                        sound_health_50_get.play()
+                        hp1 = 200
+                        item[5] = False
+                elif item[7] == 'RAIL':
+                    if len(weapons1) == 1:
+                        sound_weapon_get.play()
+                        weapons1.append('RAIL')
+                        item[5] = False
+                elif item[7] == 'GAIN':
+                    if item[8] == 'QUAD':
+                        gains1.append(['QUAD', 30])
+                        item[5] = False
+                    elif item[8] == 'PROT':
+                        gains1.append(['PROT', 30])
+                        item[5] = False
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             if hero.viewSide == "r" and flshoot:
-                sound_rifle_shot.play()
-                bullets.append(Snaryad(hero.rect.x + 48, hero.rect.y + 32, facing))
-                kshoot += 1
-
+                if weapons[0] == 'RIFLE':
+                    sound_rifle_shot.play()
+                    bullets.append(Snaryad(hero.rect.x + 48, hero.rect.y + 32, facing))
+                    kshoot += 1
+                else:
+                    if railshoot == 0:
+                        sound_railgun_shot.play()
+                        railshoot = 2
+                        bullets.append(SnaryadRail(hero.rect.x + 48, hero.rect.y + 32, facing))
             elif hero.viewSide == "l" and flshoot:
-                sound_rifle_shot.play()
-                bullets.append(Snaryad(hero.rect.x - 5, hero.rect.y + 32, facing))
-                kshoot += 1
+                if weapons[0] == 'RIFLE':
+                    sound_rifle_shot.play()
+                    bullets.append(Snaryad(hero.rect.x - 5, hero.rect.y + 32, facing))
+                    kshoot += 1
+                else:
+                    if railshoot == 0:
+                        sound_railgun_shot.play()
+                        railshoot = 2
+                        bullets.append(SnaryadRail(hero.rect.x - 5, hero.rect.y + 32, facing))
 
         if keys[pygame.K_KP0]:
             if hero1.viewSide == "r" and flshoot1:
-                sound_rifle_shot.play()
-                bullets1.append(Snaryad1(hero1.rect.x + 48, hero1.rect.y + 32, facing1))
-                kshoot1 += 1
+                if weapons1[0] == 'RIFLE':
+                    sound_rifle_shot.play()
+                    bullets1.append(Snaryad1(hero1.rect.x + 48, hero1.rect.y + 32, facing1))
+                    kshoot1 += 1
+                else:
+                    if railshoot1 == 0:
+                        sound_railgun_shot.play()
+                        railshoot1 = 2
+                        bullets1.append(SnaryadRail(hero1.rect.x + 48, hero1.rect.y + 32, facing1))
+
             elif hero1.viewSide == "l" and flshoot1:
-                sound_rifle_shot.play()
-                bullets1.append(Snaryad1(hero1.rect.x - 5, hero1.rect.y + 32, facing1))
-                kshoot1 += 1
+                if weapons1[0] == 'RIFLE':
+                    sound_rifle_shot.play()
+                    bullets1.append(Snaryad1(hero1.rect.x - 5, hero1.rect.y + 32, facing1))
+                    kshoot1 += 1
+                else:
+                    if railshoot1 == 0:
+                        sound_railgun_shot.play()
+                        railshoot1 = 2
+                        bullets1.append(SnaryadRail(hero1.rect.x - 5, hero1.rect.y + 32, facing1))
 
         if keys[pygame.K_F1]:
             hp1 = 200
