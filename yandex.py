@@ -30,57 +30,59 @@ sound_button_press_map = pygame.mixer.Sound('data/sounds/game/button_press_map.w
 sound_button_press_map.set_volume(1)
 sound_start_game = pygame.mixer.Sound('data/sounds/game/start_game.wav')
 sound_start_game.set_volume(1)
+# sound_end_round = pygame.mixer.Sound('data/sounds/game/end_round.wav') НЕТ ЕЩЁ
+# sound_end_round.set_volume(1) НЕТ ЕЩЁ
 sound_start_round = pygame.mixer.Sound('data/sounds/game/start_round.wav')
 sound_start_round.set_volume(1)
 
-sound_beg = pygame.mixer.Sound('data/sounds/hero/beg.wav')
-sound_beg.set_volume(1)
-sound_change_weapon = pygame.mixer.Sound('data/sounds/hero/change_weapon.wav')
-sound_change_weapon.set_volume(1)
-sound_death = pygame.mixer.Sound('data/sounds/hero/death.wav')
-sound_death.set_volume(1)
+# sound_beg = pygame.mixer.Sound('data/sounds/hero/beg.wav')
+# sound_beg.set_volume(1)
+# sound_change_weapon = pygame.mixer.Sound('data/sounds/hero/change_weapon.wav')
+# sound_change_weapon.set_volume(1)
+# sound_death = pygame.mixer.Sound('data/sounds/hero/death.wav')
+# sound_death.set_volume(1)
 sound_hit = pygame.mixer.Sound('data/sounds/hero/hit.wav')
-sound_hit.set_volume(0.5)
+sound_hit.set_volume(0.3)
 # sound_jump_down = pygame.mixer.Sound('data/sounds/hero/jump_down.wav')
 # sound_jump_down.set_volume(1)
 # sound_jump_up = pygame.mixer.Sound('data/sounds/hero/jump_up.wav')
 # sound_jump_up.set_volume(1)
 # sound_railgun_shot = pygame.mixer.Sound('data/sounds/hero/railgun_shot.wav')
-# sound_railgun_shot.set_volume(0.5)
+# sound_railgun_shot.set_volume(0.3)
 sound_respawn = pygame.mixer.Sound('data/sounds/hero/respawn.wav')
 sound_respawn.set_volume(1)
 sound_rifle_shot = pygame.mixer.Sound('data/sounds/hero/rifle_shot.wav')
 # sound_rifle_shot = pygame.mixer.Sound('data/sounds/hero/railgun_shot.wav')
-sound_rifle_shot.set_volume(0.5)
+sound_rifle_shot.set_volume(0.3)
 
 # sound_gain_end = pygame.mixer.Sound('data/sounds/items/gain_end.wav')
 # sound_gain_end.set_volume(1)
-# sound_health_25 = pygame.mixer.Sound('data/sounds/items/health_25_get.wav')
-# sound_health_25.set_volume(1)
-# sound_health_50 = pygame.mixer.Sound('data/sounds/items/health_50_get.wav')
-# sound_health_50.set_volume(1)
-# sound_health_100 = pygame.mixer.Sound('data/sounds/items/health_100_get.wav')
-# sound_health_100.set_volume(1)
-# sound_health_100 = pygame.mixer.Sound('data/sounds/items/health_100_spawn.wav')
-# sound_health_100.set_volume(1)
+# sound_health_25_get = pygame.mixer.Sound('data/sounds/items/health_25_get.wav')
+# sound_health_25_get.set_volume(1)
+sound_health_25_spawn = pygame.mixer.Sound('data/sounds/items/health_25_spawn.wav')
+sound_health_25_spawn.set_volume(1)
+# sound_health_50_get = pygame.mixer.Sound('data/sounds/items/health_50_get.wav')
+# sound_health_50_get.set_volume(1)
+sound_health_50_spawn = pygame.mixer.Sound('data/sounds/items/health_50_spawn.wav')
+sound_health_50_spawn.set_volume(1)
 # sound_health_ = pygame.mixer.Sound('data/sounds/items/health_spawn.wav')
 # sound_health_.set_volume(1)
 # sound_protection_get = pygame.mixer.Sound('data/sounds/items/protection_get.wav')
 # sound_protection_get.set_volume(1)
-# sound_protection_soon = pygame.mixer.Sound('data/sounds/items/protection_soon.wav')
-# sound_protection_soon.set_volume(1)
-# sound_protection_spawn = pygame.mixer.Sound('data/sounds/items/protection_spawn.wav')
-# sound_protection_spawn.set_volume(1)
+sound_protection_soon = pygame.mixer.Sound('data/sounds/items/protection_soon.wav')
+sound_protection_soon.set_volume(1)
+sound_protection_spawn = pygame.mixer.Sound('data/sounds/items/protection_spawn.wav')
+sound_protection_spawn.set_volume(1)
 # sound_quad_get = pygame.mixer.Sound('data/sounds/items/quad_get.wav')
 # sound_quad_get.set_volume(1)
-# sound_quad_soon = pygame.mixer.Sound('data/sounds/items/quad_soon.wav')
-# sound_quad_soon.set_volume(1)
-# sound_quad_spawn = pygame.mixer.Sound('data/sounds/items/quad_spawn.wav')
-# sound_quad_spawn.set_volume(1)
+sound_quad_soon = pygame.mixer.Sound('data/sounds/items/quad_soon.wav')
+sound_quad_soon.set_volume(1)
+sound_quad_spawn = pygame.mixer.Sound('data/sounds/items/quad_spawn.wav')
+sound_quad_spawn.set_volume(1)
 # sound_weapon_get = pygame.mixer.Sound('data/sounds/items/weapon_get.wav')
 # sound_weapon_get.set_volume(1)
-# sound_weapon_spawn = pygame.mixer.Sound('data/sounds/items/weapon_spawn.wav')
-# sound_weapon_spawn.set_volume(1)
+sound_weapon_spawn = pygame.mixer.Sound('data/sounds/items/weapon_spawn.wav')
+sound_weapon_spawn.set_volume(1)
 
 
 def load_image(name, colorkey=None):
@@ -638,9 +640,9 @@ MOVE_SPEED = 10
 JUMP_POWER = 20
 GRAVITY = 2
 speed = 10
-damage = 0
-damage1 = 0
-counter, text = 80, '1:20'.rjust(3)
+hp1 = 200
+hp = 200
+counter, text = 180, '3:00'.rjust(3)
 
 flshoot = True
 kshoot = 0
@@ -680,16 +682,16 @@ clock = pygame.time.Clock()
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 font1 = pygame.font.SysFont('Consolas', 50)
 font2 = pygame.font.SysFont('Consolas', 700)
-itemss = [(30, 290, 30, 30, "images/25HP.png", False, 10, 0),
-          (1140, 290, 30, 30, "images/25HP.png", False, 10, 1),
-          (30, 90, 30, 30, "images/50HP.png", False, 10, 2),
-          (1140, 90, 30, 30, "images/50HP.png", False, 10, 3)]
+font3 = pygame.font.SysFont('Consolas', 25)
+# itemss = [[30, 290, 30, 30, "images/25HP.png", False, 10, 0],
+#           [1140, 290, 30, 30, "images/25HP.png", False, 10, 1],
+#           [30, 90, 30, 30, "images/50HP.png", False, 10, 2],
+#           [1140, 90, 30, 30, "images/50HP.png", False, 10, 3]]
+itemss = []
 
 
 def DrawWindow():
-    # print("-— %s seconds —-" % (time.time() - start_time), 'GAME1')
     screen.blit(load_image('images/' + level.levelmap + '.png'), (0, 0))
-    # print("-— %s seconds —-" % (time.time() - start_time), 'GAME2')
 
     for bullet in bullets:
         bullet.draw()
@@ -697,28 +699,50 @@ def DrawWindow():
     for bullet1 in bullets1:
         bullet1.draw()
 
-    # print("-— %s seconds —-" % (time.time() - start_time), 'GAME3')
-
     screen.blit(load_image("images/Raul/head.png"), (0, 5))
     screen.blit(load_image("images/Dima/head.png"), (1170, 5))
     screen.fill(pygame.Color('red'), pygame.Rect(35, 10, 200, 20))
-    screen.fill(pygame.Color('green'), pygame.Rect(35, 10, 200 - damage1, 20))
+    screen.fill(pygame.Color('green'), pygame.Rect(35, 10, hp, 20))
+    if hp > 0:
+        if hp >= 155:
+            screen.blit(font3.render(str(hp), True, (255, 255, 255)), (190, 9))
+        else:
+            screen.blit(font3.render(str(hp), True, (255, 255, 255)), (hp + 35, 9))
+    elif hp <= 0:
+        screen.blit(font3.render('ВОЗРАЖДЕНИЕ', True, (255, 255, 255)), (40, 8))
+
     screen.fill(pygame.Color('red'), pygame.Rect(965, 10, 200, 20))
-    screen.fill(pygame.Color('green'), pygame.Rect(965 + damage, 10, 200 - damage, 20))
+    screen.fill(pygame.Color('green'), pygame.Rect(965 + 200 - hp1, 10, hp1, 20))
+    if hp1 > 0:
+        if hp1 >= 155:
+            screen.blit(font3.render(str(hp1), True, (255, 255, 255)), (967, 9))
+        else:
+            screen.blit(font3.render(str(hp1), True, (255, 255, 255)), (1120 - hp1, 9))
+    elif hp1 <= 0:
+        screen.blit(font3.render('ВОЗРАЖДЕНИЕ', True, (255, 255, 255)), (987, 8))
+
+    screen.blit(load_image("images/spawn.png"), (3, 500))
+    screen.blit(load_image("images/spawn.png"), (1137, 500))
+
+    sprite_group.draw(screen)
+
+    for i in itemss:
+        if i[5]:
+            screen.blit(load_image(i[4]), (i[0], i[1]))
+
+
     if text.split(':')[0] == '0':
         screen.blit(font1.render(text, True, (255, 0, 0)), (555, 10))
     else:
         screen.blit(font1.render(text, True, (255, 255, 255)), (555, 10))
-    # print("-— %s seconds —-" % (time.time() - start_time), 'GAME4')
-
-    sprite_group.draw(screen)
-
-    # print("-— %s seconds —-" % (time.time() - start_time), 'GAME5')
-    # print()
 
     pygame.display.flip()
 
 
+# itemss = [[30, 290, 30, 30, "images/25HP.png", False, 10, 0],
+#           [1140, 290, 30, 30, "images/25HP.png", False, 10, 1],
+#           [30, 90, 30, 30, "images/50HP.png", False, 10, 2],
+#           [1140, 90, 30, 30, "images/50HP.png", False, 10, 3]]
 game.menu()
 x, y = 0, 0
 for row in load_level(level.levelmap + '.txt'):
@@ -735,6 +759,16 @@ for row in load_level(level.levelmap + '.txt'):
             pl = PlatformHidden(x, y)
             sprite_group.add(pl)
             platforms.append(pl)
+        elif col == '+':
+            itemss.append([x + 15, y - 20, 30, 30, "images/50HP.png", False, 15, '50HP'])
+        elif col == '-':
+            itemss.append([x + 15, y - 20, 30, 30, "images/25HP.png", False, 10, '25HP'])
+        elif col == 'r':
+            itemss.append([x, y - 20, 41, 14, "images/railgun_r.png", False, 20, 'RAIL'])
+        elif col == 'l':
+            itemss.append([x, y - 20, 41, 14, "images/railgun_l.png", False, 20, 'RAIL'])
+        elif col == 'g':
+            itemss.append([x, y - 25, 40, 40, "images/quad.png", False, 80, 'GAIN', 'QUAD'])
         x += 20
     y += 20
     x = 0
@@ -763,12 +797,13 @@ while running:
             elif i == 8:
                 screenm.blit(font2.render('1', True, (255, 255, 255)), (400, -30))
             pygame.display.flip()
-            pygame.time.wait(1130)
+            pygame.time.delay(1130)
         sprite_group.empty()
         kshoot, kshoot1 = 0, 0
         sound_respawn.play()
         platforms = []
         x, y = 0, 0
+        itemss = []
         for row in load_level(level.levelmap + '.txt'):
             for col in row:
                 if col == '#':
@@ -783,6 +818,16 @@ while running:
                     pl = PlatformHidden(x, y)
                     sprite_group.add(pl)
                     platforms.append(pl)
+                elif col == '+':
+                    itemss.append([x + 15, y - 20, 30, 30, "images/50HP.png", False, 15, '50HP'])
+                elif col == '-':
+                    itemss.append([x + 15, y - 20, 30, 30, "images/25HP.png", False, 10, '25HP'])
+                elif col == 'r':
+                    itemss.append([x, y - 20, 41, 14, "images/railgun_r.png", False, 20, 'RAIL'])
+                elif col == 'l':
+                    itemss.append([x, y - 20, 41, 14, "images/railgun_l.png", False, 20, 'RAIL'])
+                elif col == 'g':
+                    itemss.append([x, y - 25, 40, 40, "images/quad.png", False, 80, 'GAIN', 'QUAD'])
                 x += 20
             y += 20
             x = 0
@@ -793,9 +838,9 @@ while running:
         sprite_group.add(hero1)
         leftP = rightP = upP = False
         leftP1 = rightP1 = upP1 = False
-        damage = 0
-        damage1 = 0
-        counter, text = 80, '1:20'.rjust(3)
+        hp1 = 200
+        hp = 200
+        counter, text = 180, '3:00'.rjust(3)
         bullets = []
         bullets1 = []
         game.startlvl = False
@@ -816,7 +861,61 @@ while running:
                 running = False
             if event.type == pygame.USEREVENT:
                 counter -= 1
+                # itemss = [[30, 290, 30, 30, "images/25HP.png", False, 10, 0],
+                #           [1140, 290, 30, 30, "images/25HP.png", False, 10, 1],
+                #           [30, 90, 30, 30, "images/50HP.png", False, 10, 2],
+                #           [1140, 90, 30, 30, "images/50HP.png", False, 10, 3]]
+                # elif col == '+':
+                #     itemss.append([x + 15, y - 20, 30, 30, "images/50HP.png", False, 10, '50HP'])
+                # elif col == '-':
+                #     itemss.append([x + 15, y - 20, 30, 30, "images/25HP.png", False, 10, '25HP'])
+                # elif col == 'r':
+                #     itemss.append([x, y - 20, 41, 14, "images/railgun_r.png", False, 30, 'RAIL'])
+                # elif col == 'l':
+                #     itemss.append([x, y - 20, 41, 14, "images/railgun_l.png", False, 30, 'RAIL'])
+                # elif col == 'g':
+                #     itemss.append([x, y - 20, 41, 16, "images/rifle_r.png", False, 80, 'GAIN'])
                 if counter >= 0:
+
+                    for i in itemss:
+                        if not i[5] and i[7] != 'GAIN':
+                            i[6] -= 1
+                            if i[6] == 0:
+                                i[5] = True
+                                if i[7] == '50HP':
+                                    i[6] = 30
+                                    sound_health_50_spawn.play()
+                                elif i[7] == '25HP':
+                                    i[6] = 20
+                                    sound_health_25_spawn.play()
+                                elif i[7] == 'RAIL':
+                                    i[6] = 40
+                                    sound_weapon_spawn.play()
+                        elif i[7] == 'GAIN':
+                            i[6] -= 1
+                            if i[6] == 0:
+                                if i[8] == 'QUAD':
+                                    sound_quad_spawn.play()
+                                else:
+                                    sound_protection_spawn.play()
+                                i[5] = True
+                            elif i[6] == 10:
+                                if i[8] == 'QUAD':
+                                    sound_quad_soon.play()
+                                else:
+                                    sound_protection_soon.play()
+                            elif i[6] == -40:
+                                i[6] = 40
+                                i[5] = False
+                                if i[8] == 'QUAD':
+                                    i[8] = 'PROT'
+                                    # i[4] = 'images/rifle_l.png'
+                                    i[4] = 'images/protection.png'
+                                else:
+                                    i[8] = 'QUAD'
+                                    # i[4] = 'images/rifle_r.png'
+                                    i[4] = 'images/quad.png'
+
                     seconds = counter
                     minutes = 0
                     while seconds >= 60:
@@ -830,6 +929,7 @@ while running:
                         sound_5_min.play()
                     # if round_time == '1:00':
                     #     sound_1_min.play()
+
                 if counter == 0:
                     pygame.mixer_music.stop()
                     screenm.blit(load_image("images/menu.png"), (0, 0))
@@ -872,7 +972,7 @@ while running:
 
             if hero1.rect.x + 48 >= bullet.x >= hero1.rect.x and hero1.rect.y + 80 >= bullet.y >= hero1.rect.y:
                 sound_hit.play()
-                damage += 5
+                hp1 -= 5
                 bullets.pop(bullets.index(bullet))
 
         if kshoot == 10:
@@ -899,7 +999,7 @@ while running:
 
             if hero.rect.x + 48 >= bullet1.x >= hero.rect.x and hero.rect.y + 80 >= bullet1.y >= hero.rect.y:
                 sound_hit.play()
-                damage1 += 5
+                hp -= 5
                 bullets1.pop(bullets1.index(bullet1))
 
         if kshoot1 == 10:
@@ -932,8 +1032,8 @@ while running:
                 kshoot1 += 1
 
         if keys[pygame.K_F1]:
-            damage = 0
-            damage1 = 0
+            hp1 = 200
+            hp = 200
 
         kpshoot += 1
         kpshoot1 += 1
