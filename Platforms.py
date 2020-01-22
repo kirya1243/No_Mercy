@@ -1,38 +1,39 @@
-from pygame.sprite import Sprite
-from pygame.image import load
-# from random import randint
+import pygame
+from random import choice
 
 
-class PlatformMetal(Sprite):
+class PlatformMetal(pygame.sprite.Sprite):
     def __init__(self, x, y):
-        Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self)
 
-        self.texture = load('data/images/texture_metal.png')
-        # self.rx = randint(0, 880)
-        # self.ry = randint(0, 880)
-        self.image = self.texture.subsurface((0, 0, 20, 20))
+        self.texture = pygame.image.load('data/images/texture_metal.png')
+        self.angles = [90, 180, 270, 360]
+        self.angle = choice(self.angles)
+        self.texture_rotate = pygame.transform.rotate(self.texture, self.angle)
+        self.image = self.texture_rotate.subsurface((0, 0, 20, 20))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
 
-class PlatformStone(Sprite):
+class PlatformStone(pygame.sprite.Sprite):
     def __init__(self, x, y):
-        Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self)
 
-        self.texture = load('data/images/texture_stone.jpg')
-        # self.rx = randint(0, 880)
-        # self.ry = randint(0, 880)
-        self.image = self.texture.subsurface((0, 0, 20, 20))
+        self.texture = pygame.image.load('data/images/texture_stone.jpg')
+        self.angles = [90, 180, 270, 360]
+        self.angle = choice(self.angles)
+        self.texture_rotate = pygame.transform.rotate(self.texture, self.angle)
+        self.image = self.texture_rotate.subsurface((0, 0, 20, 20))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
 
-class PlatformHidden(Sprite):
+class PlatformHidden(pygame.sprite.Sprite):
     def __init__(self, x, y):
-        Sprite.__init__(self)
-        self.image = load('data/images/hidden.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('data/images/hidden.png')
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y

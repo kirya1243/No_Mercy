@@ -1,79 +1,86 @@
-import pygame, sys
+import pygame
+import sys
 import os
-import pygame.mouse
-from pygame.sprite import Sprite, collide_rect
-from pygame import Surface
-from pygame.image import load
-from Platforms import PlatformMetal, PlatformStone, PlatformHidden
+from random import choice
+
+# import time
+# start_time = time.time()
 
 
 pygame.mixer.init()
 # pygame.mixer_music.load('data/sounds/Black Magic.mp3')
 # pygame.mixer_music.load('data/sounds/Corrupted Keep.mp3')
 # pygame.mixer_music.load('data/sounds/menu.mp3')
-pygame.mixer_music.set_volume(0.3)
+setting = open('data/tools/music.ini', encoding='utf-8').read()
+if setting == 'on':
+    pygame.mixer_music.set_volume(0.1)
+else:
+    pygame.mixer_music.set_volume(0)
 
+
+# sound_1_min = pygame.mixer.Sound('data/sounds/game/1_min.wav') НЕТ ЕЩЁ
+# sound_1_min.set_volume(1) НЕТ ЕЩЁ
 sound_5_min = pygame.mixer.Sound('data/sounds/game/5_min.wav')
-sound_5_min.set_volume(0.8)
+sound_5_min.set_volume(1)
 sound_button_press = pygame.mixer.Sound('data/sounds/game/button_press.wav')
-sound_button_press.set_volume(0.8)
+sound_button_press.set_volume(1)
 sound_button_press_game = pygame.mixer.Sound('data/sounds/game/button_press_game.wav')
-sound_button_press_game.set_volume(0.8)
+sound_button_press_game.set_volume(1)
 sound_button_press_map = pygame.mixer.Sound('data/sounds/game/button_press_map.wav')
-sound_button_press_map.set_volume(0.8)
+sound_button_press_map.set_volume(1)
 sound_start_game = pygame.mixer.Sound('data/sounds/game/start_game.wav')
-sound_start_game.set_volume(0.8)
+sound_start_game.set_volume(1)
 sound_start_round = pygame.mixer.Sound('data/sounds/game/start_round.wav')
-sound_start_round.set_volume(0.8)
+sound_start_round.set_volume(1)
 
 sound_beg = pygame.mixer.Sound('data/sounds/hero/beg.wav')
-sound_beg.set_volume(0.8)
+sound_beg.set_volume(1)
 sound_change_weapon = pygame.mixer.Sound('data/sounds/hero/change_weapon.wav')
-sound_change_weapon.set_volume(0.8)
+sound_change_weapon.set_volume(1)
 sound_death = pygame.mixer.Sound('data/sounds/hero/death.wav')
-sound_death.set_volume(0.8)
-sound_jump_down = pygame.mixer.Sound('data/sounds/hero/jump_down.wav')
-sound_jump_down.set_volume(0.8)
-sound_jump_up = pygame.mixer.Sound('data/sounds/hero/jump_up.wav')
-sound_jump_up.set_volume(0.8)
-sound_railgun_shot = pygame.mixer.Sound('data/sounds/hero/railgun_shot.wav')
-sound_railgun_shot.set_volume(0.8)
+sound_death.set_volume(1)
+sound_hit = pygame.mixer.Sound('data/sounds/hero/hit.wav')
+sound_hit.set_volume(0.5)
+# sound_jump_down = pygame.mixer.Sound('data/sounds/hero/jump_down.wav')
+# sound_jump_down.set_volume(1)
+# sound_jump_up = pygame.mixer.Sound('data/sounds/hero/jump_up.wav')
+# sound_jump_up.set_volume(1)
+# sound_railgun_shot = pygame.mixer.Sound('data/sounds/hero/railgun_shot.wav')
+# sound_railgun_shot.set_volume(0.5)
 sound_respawn = pygame.mixer.Sound('data/sounds/hero/respawn.wav')
-sound_respawn.set_volume(0.8)
+sound_respawn.set_volume(1)
 sound_rifle_shot = pygame.mixer.Sound('data/sounds/hero/rifle_shot.wav')
-sound_rifle_shot.set_volume(0.8)
+# sound_rifle_shot = pygame.mixer.Sound('data/sounds/hero/railgun_shot.wav')
+sound_rifle_shot.set_volume(0.5)
 
-sound_gain_end = pygame.mixer.Sound('data/sounds/items/gain_end.wav')
-sound_gain_end.set_volume(0.8)
-sound_health_25 = pygame.mixer.Sound('data/sounds/items/health_25_get.wav')
-sound_health_25.set_volume(0.8)
-sound_health_50 = pygame.mixer.Sound('data/sounds/items/health_50_get.wav')
-sound_health_50.set_volume(0.8)
-sound_health_100 = pygame.mixer.Sound('data/sounds/items/health_100_get.wav')
-sound_health_100.set_volume(0.8)
-sound_health_100 = pygame.mixer.Sound('data/sounds/items/health_100_spawn.wav')
-sound_health_100.set_volume(0.8)
-sound_health_ = pygame.mixer.Sound('data/sounds/items/health_spawn.wav')
-sound_health_.set_volume(0.8)
-sound_protection_get = pygame.mixer.Sound('data/sounds/items/protection_get.wav')
-sound_protection_get.set_volume(0.8)
-sound_protection_soon = pygame.mixer.Sound('data/sounds/items/protection_soon.wav')
-sound_protection_soon.set_volume(0.8)
-sound_protection_spawn = pygame.mixer.Sound('data/sounds/items/protection_spawn.wav')
-sound_protection_spawn.set_volume(0.8)
-sound_quad_get = pygame.mixer.Sound('data/sounds/items/quad_get.wav')
-sound_quad_get.set_volume(0.8)
-sound_quad_soon = pygame.mixer.Sound('data/sounds/items/quad_soon.wav')
-sound_quad_soon.set_volume(0.8)
-sound_quad_spawn = pygame.mixer.Sound('data/sounds/items/quad_spawn.wav')
-sound_quad_spawn.set_volume(0.8)
-sound_weapon_get = pygame.mixer.Sound('data/sounds/items/weapon_get.wav')
-sound_weapon_get.set_volume(0.8)
-sound_weapon_spawn = pygame.mixer.Sound('data/sounds/items/weapon_spawn.wav')
-sound_weapon_spawn.set_volume(0.8)
-
-# pygame.mixer_music.play(-1)
-# sound_start_round.play()
+# sound_gain_end = pygame.mixer.Sound('data/sounds/items/gain_end.wav')
+# sound_gain_end.set_volume(1)
+# sound_health_25 = pygame.mixer.Sound('data/sounds/items/health_25_get.wav')
+# sound_health_25.set_volume(1)
+# sound_health_50 = pygame.mixer.Sound('data/sounds/items/health_50_get.wav')
+# sound_health_50.set_volume(1)
+# sound_health_100 = pygame.mixer.Sound('data/sounds/items/health_100_get.wav')
+# sound_health_100.set_volume(1)
+# sound_health_100 = pygame.mixer.Sound('data/sounds/items/health_100_spawn.wav')
+# sound_health_100.set_volume(1)
+# sound_health_ = pygame.mixer.Sound('data/sounds/items/health_spawn.wav')
+# sound_health_.set_volume(1)
+# sound_protection_get = pygame.mixer.Sound('data/sounds/items/protection_get.wav')
+# sound_protection_get.set_volume(1)
+# sound_protection_soon = pygame.mixer.Sound('data/sounds/items/protection_soon.wav')
+# sound_protection_soon.set_volume(1)
+# sound_protection_spawn = pygame.mixer.Sound('data/sounds/items/protection_spawn.wav')
+# sound_protection_spawn.set_volume(1)
+# sound_quad_get = pygame.mixer.Sound('data/sounds/items/quad_get.wav')
+# sound_quad_get.set_volume(1)
+# sound_quad_soon = pygame.mixer.Sound('data/sounds/items/quad_soon.wav')
+# sound_quad_soon.set_volume(1)
+# sound_quad_spawn = pygame.mixer.Sound('data/sounds/items/quad_spawn.wav')
+# sound_quad_spawn.set_volume(1)
+# sound_weapon_get = pygame.mixer.Sound('data/sounds/items/weapon_get.wav')
+# sound_weapon_get.set_volume(1)
+# sound_weapon_spawn = pygame.mixer.Sound('data/sounds/items/weapon_spawn.wav')
+# sound_weapon_spawn.set_volume(1)
 
 
 def load_image(name, colorkey=None):
@@ -97,14 +104,51 @@ def load_level(filename):
 
 
 pygame.init()
+pygame.mouse.set_visible(False)
 size = 1200, 540
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption('SUPER KVEIK 2D')
+pygame.display.set_caption('INSTA KVEIK 2D')
 pygame.display.set_icon(pygame.image.load("data/images/icon.jpg"))
 
 sizem = 1200, 540
 screenm = pygame.display.set_mode(sizem)
-# screenm.blit(load_image("images/menu.png"), (0, 0))
+
+
+class PlatformMetal(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.texture = pygame.image.load('data/images/texture_metal.png')
+        self.angles = [90, 180, 270, 360]
+        self.angle = choice(self.angles)
+        self.texture_rotate = pygame.transform.rotate(self.texture, self.angle)
+        self.image = self.texture_rotate.subsurface((0, 0, 20, 20))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+class PlatformStone(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.texture = pygame.image.load('data/images/texture_stone.jpg')
+        self.angles = [90, 180, 270, 360]
+        self.angle = choice(self.angles)
+        self.texture_rotate = pygame.transform.rotate(self.texture, self.angle)
+        self.image = self.texture_rotate.subsurface((0, 0, 20, 20))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+class PlatformHidden(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('data/images/hidden.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
 
 class Menu:
@@ -120,20 +164,35 @@ class Menu:
                 holst.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
 
     def menu(self):
+        pygame.event.clear()
         done = True
-        pygame.mixer_music.load('data/sounds/menu.mp3')
-        pygame.mixer_music.play(-1)
+        if not pygame.mixer_music.get_busy():
+            setting = open('data/tools/music.ini', encoding='utf-8').read()
+            if setting == 'on':
+                pygame.mixer_music.set_volume(0.1)
+            else:
+                pygame.mixer_music.set_volume(0)
+            pygame.mixer_music.load('data/sounds/menu.mp3')
+            pygame.mixer_music.play(-1)
         font_menu = pygame.font.SysFont('Arial', 50)
+        font_text = pygame.font.SysFont('Arial', 40)
         punkt = 0
+        text1 = font_text.render("INSTA KVEIK 2D v1", True, (240, 0, 0))
+        screenm.blit(text1, (442, 480))
         while done:
+            # print('MENU', "-— %s seconds —-" % (time.time() - start_time))
             self.render(screenm, font_menu, punkt)
 
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
+                    sound_button_press.play()
+                    pygame.time.wait(600)
                     sys.exit()
                 if e.type == pygame.KEYDOWN:
-                    if e.key == pygame.K_ESCAPE:
-                        sys.exit()
+                    # if e.key == pygame.K_ESCAPE:
+                    #     sound_button_press.play()
+                    #     pygame.time.wait(600)
+                    #     sys.exit()
                     if e.key == pygame.K_UP:
                         if punkt > 0:
                             punkt -= 1
@@ -143,11 +202,13 @@ class Menu:
                     if e.key == pygame.K_RETURN:
                         if punkt == 0:
                             sound_button_press_game.play()
+                            pygame.time.wait(600)
                             screenm.blit(load_image("images/map.png"), (0, 0))
                             level.levelf()
                             done = False
                         elif punkt == 1:
                             sound_button_press.play()
+                            pygame.time.wait(600)
                             pass  # ВИДЕО-ОБУЧАЛКА
                         elif punkt == 2:
                             sound_button_press.play()
@@ -166,7 +227,6 @@ game = Menu(punkts)
 class Level:
     def __init__(self, punktsmap=[0, 0, 'Punkt', (250, 250, 30), (250, 250, 30), 0]):
         self.punkts = punktsmap
-        self.startlvl = False
         self.levelmap = ''
 
     def render(self, holst, font, num_punkt):
@@ -177,6 +237,7 @@ class Level:
                 holst.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
 
     def levelf(self):
+        pygame.event.clear()
         done = True
         karta1 = pygame.transform.scale(load_image("images/level_1.png"), (540, 243))
         karta2 = pygame.transform.scale(load_image("images/level_2.png"), (540, 243))
@@ -190,30 +251,49 @@ class Level:
         font_menu = pygame.font.SysFont('Arial', 70)
         punkt = 0
         while done:
+            # print('LEVEL', "-— %s seconds —-" % (time.time() - start_time))
             self.render(screenm, font_menu, punkt)
 
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
+                    sound_button_press.play()
+                    pygame.time.wait(600)
                     sys.exit()
                 if e.type == pygame.KEYDOWN:
                     if e.key == pygame.K_ESCAPE:
+                        sound_button_press.play()
+                        pygame.time.wait(600)
                         screenm.blit(load_image("images/menu.png"), (0, 0))
                         game.menu()
                         done = False
                     if e.key == pygame.K_LEFT:
                         if punkt > 0:
+                            sound_button_press_map.play()
+                            pygame.time.wait(200)
+                            pygame.event.clear()
                             punkt -= 1
                     if e.key == pygame.K_RIGHT:
                         if punkt < len(self.punkts) - 1:
+                            sound_button_press_map.play()
+                            pygame.time.wait(200)
+                            pygame.event.clear()
                             punkt += 1
                     if e.key == pygame.K_RETURN:
                         if punkt == 0:
                             self.levelmap = 'level_1'
-                            self.startlvl = True
+                            screenm.blit(load_image('images/level_1.png'), (0, 0))
+                            pygame.mixer_music.stop()
+                            sound_start_game.play()
+                            pygame.time.wait(3000)
+                            game.startlvl = True
                             done = False
                         elif punkt == 1:
                             self.levelmap = 'level_2'
-                            self.startlvl = True
+                            screenm.blit(load_image('images/level_2.png'), (0, 0))
+                            pygame.mixer_music.stop()
+                            sound_start_game.play()
+                            pygame.time.wait(3000)
+                            game.startlvl = True
                             done = False
             screen.blit(screenm, (0, 0))
             pygame.display.flip()
@@ -224,7 +304,7 @@ punktsmap = [[100, 30, 'The Longest Yard', (128, 128, 128), (255, 255, 255), 0],
 level = Level(punktsmap)
 
 sizep = 1200, 540
-screenp = pygame.display.set_mode(sizem)
+# screenp = pygame.display.set_mode(sizem)
 screenm.blit(load_image("images/menu.png"), (0, 0))
 
 
@@ -243,18 +323,34 @@ class Pause:
 
     def pause(self):
         done = True
+        if pygame.mixer.music.get_busy:
+            pygame.mixer.music.pause()
         game.startlvl = False
         font_pause = pygame.font.SysFont('Arial', 50)
+        font_text = pygame.font.SysFont('Arial', 40)
+        text1 = font_text.render("ПАУЗА", True, (240, 0, 0))
+
         punkt = 0
         i = punktsp[1]
+        setting = open('data/tools/music.ini', encoding='utf-8').read()
+        if setting == 'on':
+            i[2] = 'МУЗЫКА ВЫКЛ'
+            i[0] = 450
+        else:
+            i[2] = 'МУЗЫКА ВКЛ'
+            i[0] = 470
         while done:
-            self.render(screenp, font_pause, punkt)
-
+            # print('PAUSE', "-— %s seconds —-" % (time.time() - start_time))
+            self.render(screenm, font_pause, punkt)
+            screenm.blit(text1, (543, 480))
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
+                    sound_button_press.play()
+                    pygame.time.wait(600)
                     sys.exit()
                 if e.type == pygame.KEYDOWN:
                     if e.key == pygame.K_ESCAPE:
+                        pygame.mixer.music.unpause()
                         done = False
                     if e.key == pygame.K_UP:
                         if punkt > 0:
@@ -264,36 +360,51 @@ class Pause:
                             punkt += 1
                     if e.key == pygame.K_RETURN:
                         if punkt == 0:
+                            pygame.mixer.music.unpause()
                             done = False
                         elif punkt == 1:
-                            if len(i[2]) == 10:
-                                i[2] = 'МУЗЫКА ВЫКЛ'
-                                i[0] = 450
-                                self.render(screenp, font_pause, punkt)
-                            else:
+                            sound_button_press.play()
+                            pygame.time.wait(500)
+                            setting = open('data/tools/music.ini', encoding='utf-8').read()
+                            if setting == 'on':
+                                open('data/tools/music.ini', 'w').close()
+                                setting = open('data/tools/music.ini', 'a', encoding='utf-8')
+                                setting.write('off')
+                                setting.close()
                                 i[2] = 'МУЗЫКА ВКЛ'
                                 i[0] = 470
-                                self.render(screenp, font_pause, punkt)
+                                self.render(screenm, font_pause, punkt)
+                            else:
+                                open('data/tools/music.ini', 'w').close()
+                                setting = open('data/tools/music.ini', 'a', encoding='utf-8')
+                                setting.write('on')
+                                setting.close()
+                                i[2] = 'МУЗЫКА ВЫКЛ'
+                                i[0] = 450
+                                self.render(screenm, font_pause, punkt)
                         elif punkt == 2:
+                            pygame.mixer_music.stop()
+                            sound_button_press.play()
+                            pygame.time.wait(600)
                             screenm.blit(load_image("images/menu.png"), (0, 0))
                             game.startlvl = True
                             game.menu()
                             done = False
-            screen.blit(screenp, (0, 0))
+            screen.blit(screenm, (0, 0))
             pygame.display.flip()
 
 
 punktsp = [[455, 80, 'ПРОДОЛЖИТЬ', (128, 128, 128), (255, 255, 255), 0],
-          [470, 150, 'МУЗЫКА ВКЛ', (128, 128, 128), (255, 255, 255), 1],
-          [439, 220, 'ПОКИНУТЬ БОЙ', (128, 128, 128), (255, 255, 255), 2]]
+           [470, 150, 'МУЗЫКА ВКЛ', (128, 128, 128), (255, 255, 255), 1],
+           [439, 220, 'ПОКИНУТЬ БОЙ', (128, 128, 128), (255, 255, 255), 2]]
 pause = Pause(punktsp)
 
 
-class Raul(Sprite):
+class Raul(pygame.sprite.Sprite):
     def __init__(self, x, y):
-        Sprite.__init__(self)
-        self.image = Surface((48, 80))
-        self.image = load("data/images/Raul/rifle/Raul_r0.png").convert_alpha()
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((48, 80))
+        self.image = pygame.image.load("data/images/Raul/rifle/Raul_r0.png").convert_alpha()
         self.xvel = 0
         self.yvel = 0
         self.rect = self.image.get_rect()
@@ -327,11 +438,11 @@ class Raul(Sprite):
             else:
                 self.sChMarker += 1
             if self.viewSide == 'l' and self.sChMarker == 1:
-                self.image = load("data/images/Raul/rifle/" + self.stayL[0]).convert_alpha()
+                self.image = pygame.image.load("data/images/Raul/rifle/" + self.stayL[0]).convert_alpha()
                 self.stayL.insert(6, self.stayL[0])
                 del self.stayL[0]
             elif self.viewSide == 'r' and self.sChMarker == 1:
-                self.image = load("data/images/Raul/rifle/" + self.stayR[0]).convert_alpha()
+                self.image = pygame.image.load("data/images/Raul/rifle/" + self.stayR[0]).convert_alpha()
                 self.stayR.insert(6, self.stayR[0])
                 del self.stayR[0]
         else:
@@ -341,7 +452,7 @@ class Raul(Sprite):
             if self.viewSide == 'l':
                 self.rChMarker = 1
                 if self.lChMarker == 1:
-                    self.image = load("data/images/Raul/rifle/" + self.begL[0]).convert_alpha()
+                    self.image = pygame.image.load("data/images/Raul/rifle/" + self.begL[0]).convert_alpha()
                     self.begL.insert(4, self.begL[0])
                     del self.begL[0]
                 if self.lChMarker == 4:
@@ -351,7 +462,7 @@ class Raul(Sprite):
             elif self.viewSide == 'r':
                 self.lChMarker = 1
                 if self.rChMarker == 1:
-                    self.image = load("data/images/Raul/rifle/" + self.begR[0]).convert_alpha()
+                    self.image = pygame.image.load("data/images/Raul/rifle/" + self.begR[0]).convert_alpha()
                     self.begR.insert(4, self.begR[0])
                     del self.begR[0]
                 if self.rChMarker == 4:
@@ -368,6 +479,10 @@ class Raul(Sprite):
             self.xvel = 0
         if up:
             if self.onGround:
+                # sound_jump_up.fadeout()
+                # if sound_jump_up.get_num_channels() < 1:
+                #     sound_jump_up.play()
+                # print(sound_jump_up.get_raw())
                 self.yvel = -JUMP_POWER
         if not self.onGround:
             self.yvel += GRAVITY
@@ -384,7 +499,7 @@ class Raul(Sprite):
 
     def collide(self, xvel, yvel, platforms):
         for pl1 in platforms:
-            if collide_rect(self, pl1):
+            if pygame.sprite.collide_rect(self, pl1):
                 if xvel > 0:
                     self.rect.right = pl1.rect.left
                 if xvel < 0:
@@ -398,11 +513,11 @@ class Raul(Sprite):
                     self.yvel = 0
 
 
-class Dima(Sprite):
+class Dima(pygame.sprite.Sprite):
     def __init__(self, x1, y1):
-        Sprite.__init__(self)
-        self.image = Surface((48, 80))
-        self.image = load("data/images/Dima/rifle/Dima_l0.png").convert_alpha()
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((48, 80))
+        self.image = pygame.image.load("data/images/Dima/rifle/Dima_l0.png").convert_alpha()
         self.xvel = 0
         self.yvel = 0
         self.rect = self.image.get_rect()
@@ -436,11 +551,11 @@ class Dima(Sprite):
             else:
                 self.sChMarker += 1
             if self.viewSide == 'l' and self.sChMarker == 1:
-                self.image = load("data/images/Dima/rifle/" + self.stayL[0]).convert_alpha()
+                self.image = pygame.image.load("data/images/Dima/rifle/" + self.stayL[0]).convert_alpha()
                 self.stayL.insert(6, self.stayL[0])
                 del self.stayL[0]
             elif self.viewSide == 'r' and self.sChMarker == 1:
-                self.image = load("data/images/Dima/rifle/" + self.stayR[0]).convert_alpha()
+                self.image = pygame.image.load("data/images/Dima/rifle/" + self.stayR[0]).convert_alpha()
                 self.stayR.insert(6, self.stayR[0])
                 del self.stayR[0]
         else:
@@ -450,7 +565,7 @@ class Dima(Sprite):
             if self.viewSide == 'l':
                 self.rChMarker = 1
                 if self.lChMarker == 1:
-                    self.image = load("data/images/Dima/rifle/" + self.begL[0]).convert_alpha()
+                    self.image = pygame.image.load("data/images/Dima/rifle/" + self.begL[0]).convert_alpha()
                     self.begL.insert(4, self.begL[0])
                     del self.begL[0]
                 if self.lChMarker == 4:
@@ -460,7 +575,7 @@ class Dima(Sprite):
             elif self.viewSide == 'r':
                 self.lChMarker = 1
                 if self.rChMarker == 1:
-                    self.image = load("data/images/Dima/rifle/" + self.begR[0]).convert_alpha()
+                    self.image = pygame.image.load("data/images/Dima/rifle/" + self.begR[0]).convert_alpha()
                     self.begR.insert(4, self.begR[0])
                     del self.begR[0]
                 if self.rChMarker == 4:
@@ -493,7 +608,7 @@ class Dima(Sprite):
 
     def collide(self, xvel, yvel, platforms):
         for pl1 in platforms:
-            if collide_rect(self, pl1):
+            if pygame.sprite.collide_rect(self, pl1):
                 if xvel > 0:
                     self.rect.right = pl1.rect.left
                 if xvel < 0:
@@ -519,14 +634,13 @@ sprite_group.add(hero)
 sprite_group.add(hero1)
 platforms = []
 
-
 MOVE_SPEED = 10
 JUMP_POWER = 20
 GRAVITY = 2
 speed = 10
 damage = 0
 damage1 = 0
-counter, text = 199, '199'.rjust(3)
+counter, text = 80, '1:20'.rjust(3)
 
 flshoot = True
 kshoot = 0
@@ -565,6 +679,7 @@ punkts = [(470, 90, 'НОВЫЙ БОЙ', (128, 128, 128), (255, 255, 255), 0),
 clock = pygame.time.Clock()
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 font1 = pygame.font.SysFont('Consolas', 50)
+font2 = pygame.font.SysFont('Consolas', 700)
 itemss = [(30, 290, 30, 30, "images/25HP.png", False, 10, 0),
           (1140, 290, 30, 30, "images/25HP.png", False, 10, 1),
           (30, 90, 30, 30, "images/50HP.png", False, 10, 2),
@@ -572,7 +687,9 @@ itemss = [(30, 290, 30, 30, "images/25HP.png", False, 10, 0),
 
 
 def DrawWindow():
+    # print("-— %s seconds —-" % (time.time() - start_time), 'GAME1')
     screen.blit(load_image('images/' + level.levelmap + '.png'), (0, 0))
+    # print("-— %s seconds —-" % (time.time() - start_time), 'GAME2')
 
     for bullet in bullets:
         bullet.draw()
@@ -580,18 +697,26 @@ def DrawWindow():
     for bullet1 in bullets1:
         bullet1.draw()
 
+    # print("-— %s seconds —-" % (time.time() - start_time), 'GAME3')
+
     screen.blit(load_image("images/Raul/head.png"), (0, 5))
     screen.blit(load_image("images/Dima/head.png"), (1170, 5))
     screen.fill(pygame.Color('red'), pygame.Rect(35, 10, 200, 20))
     screen.fill(pygame.Color('green'), pygame.Rect(35, 10, 200 - damage1, 20))
     screen.fill(pygame.Color('red'), pygame.Rect(965, 10, 200, 20))
     screen.fill(pygame.Color('green'), pygame.Rect(965 + damage, 10, 200 - damage, 20))
-    screen.blit(font1.render(text, True, (255, 0, 0)), (545, 10))
+    if text.split(':')[0] == '0':
+        screen.blit(font1.render(text, True, (255, 0, 0)), (555, 10))
+    else:
+        screen.blit(font1.render(text, True, (255, 255, 255)), (555, 10))
+    # print("-— %s seconds —-" % (time.time() - start_time), 'GAME4')
 
     sprite_group.draw(screen)
 
-    pygame.display.flip()
+    # print("-— %s seconds —-" % (time.time() - start_time), 'GAME5')
+    # print()
 
+    pygame.display.flip()
 
 
 game.menu()
@@ -603,7 +728,6 @@ for row in load_level(level.levelmap + '.txt'):
             sprite_group.add(pl)
             platforms.append(pl)
         elif col == '%':
-            print(1)
             pl = PlatformStone(x, y)
             sprite_group.add(pl)
             platforms.append(pl)
@@ -615,20 +739,33 @@ for row in load_level(level.levelmap + '.txt'):
     y += 20
     x = 0
 
-
 running = True
 while running:
-    clock.tick(30)
+    clock.tick(25)
     if game.startlvl:
-        pygame.mixer_music.load('data/sounds/Black Magic.mp3')
+        if level.levelmap == 'level_1':
+            pygame.mixer_music.load('data/sounds/Black Magic.mp3')
+        else:
+            pygame.mixer_music.load('data/sounds/Corrupted Keep.mp3')
+        setting = open('data/tools/music.ini', encoding='utf-8').read()
+        if setting == 'on':
+            pygame.mixer_music.set_volume(0.2)
+        else:
+            pygame.mixer_music.set_volume(0)
         pygame.mixer_music.play()
         sound_start_round.play()
+        for i in range(9):
+            screenm.blit(load_image('images/' + level.levelmap + '.png'), (0, 0))
+            if i == 6:
+                screenm.blit(font2.render('3', True, (255, 255, 255)), (400, -30))
+            elif i == 7:
+                screenm.blit(font2.render('2', True, (255, 255, 255)), (400, -30))
+            elif i == 8:
+                screenm.blit(font2.render('1', True, (255, 255, 255)), (400, -30))
+            pygame.display.flip()
+            pygame.time.wait(1130)
         sprite_group.empty()
         kshoot, kshoot1 = 0, 0
-        screen.blit(load_image('images/' + level.levelmap + '.png'), (0, 0))
-        delay_marker = 1
-        pygame.time.delay(10000)
-        delay_marker = 0
         sound_respawn.play()
         platforms = []
         x, y = 0, 0
@@ -658,125 +795,155 @@ while running:
         leftP1 = rightP1 = upP1 = False
         damage = 0
         damage1 = 0
-        counter, text = 199, '199'.rjust(3)
+        counter, text = 80, '1:20'.rjust(3)
         bullets = []
         bullets1 = []
         game.startlvl = False
         hero.update(leftP, rightP, upP, platforms)
         hero1.update(leftP1, rightP1, upP1, platforms)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.USEREVENT:
-            counter -= 1
-            if counter >= 0:
-                text = str(counter).rjust(3)
-            if counter == 0:
-                screenm.blit(load_image("images/menu.png"), (0, 0))
-                game.menu()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                screenm.blit(load_image("images/menu.png"), (0, 0))
-                pause.pause()
-            if event.key == pygame.K_a:
-                leftP = True
-            if event.key == pygame.K_d:
-                rightP = True
-            if event.key == pygame.K_w:
-                upP = True
-            if event.key == pygame.K_LEFT:
-                leftP1 = True
-            if event.key == pygame.K_RIGHT:
-                rightP1 = True
-            if event.key == pygame.K_UP:
-                upP1 = True
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_a:
-                leftP = False
-            if event.key == pygame.K_d:
-                rightP = False
-            if event.key == pygame.K_w:
-                upP = False
-            if event.key == pygame.K_LEFT:
-                leftP1 = False
-            if event.key == pygame.K_RIGHT:
-                rightP1 = False
-            if event.key == pygame.K_UP:
-                upP1 = False
-
-    for bullet in bullets:
-        if 1300 > bullet.x > -100:
-            bullet.x += bullet.vel
-        else:
-            bullets.pop(bullets.index(bullet))
-
-        if hero1.rect.x + 48 >= bullet.x >= hero1.rect.x and hero1.rect.y + 80 >= bullet.y >= hero1.rect.y:
-            damage += 5
-            bullets.pop(bullets.index(bullet))
-
-    if kshoot == 10:
-        flshoot = False
-        kpshoot = 0
-        kshoot = 0
-    if kpshoot == 30:
-        flshoot = True
-    if hero.viewSide == "r":
-        facing = 1
-    elif hero.viewSide == "l":
-        facing = -1
-    if hero1.viewSide == "r":
-        facing1 = 1
-    elif hero1.viewSide == "l":
-        facing1 = -1
-    if counter % 10 == 0:
-        flhealth = True
-    for bullet1 in bullets1:
-        if 1300 > bullet1.x > -100:
-            bullet1.x += bullet1.vel1
-        else:
-            bullets1.pop(bullets1.index(bullet1))
-
-        if hero.rect.x + 48 >= bullet1.x >= hero.rect.x and hero.rect.y + 80 >= bullet1.y >= hero.rect.y:
-            damage1 += 5
-            bullets1.pop(bullets1.index(bullet1))
-
-    if kshoot1 == 10:
-        flshoot1 = False
-        kpshoot1 = 0
-        kshoot1 = 0
-    if kpshoot1 == 30:
-        flshoot1 = True
-
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_SPACE]:
-        if hero.viewSide == "r" and flshoot:
-            bullets.append(Snaryad(hero.rect.x + 48, hero.rect.y + 32, facing))
-            kshoot += 1
-        elif hero.viewSide == "l" and flshoot:
-            bullets.append(Snaryad(hero.rect.x - 5, hero.rect.y + 32, facing))
-            kshoot += 1
-
-    if keys[pygame.K_KP0]:
-        if hero1.viewSide == "r" and flshoot1:
-            bullets1.append(Snaryad1(hero1.rect.x + 48, hero1.rect.y + 32, facing1))
-            kshoot1 += 1
-        elif hero1.viewSide == "l" and flshoot1:
-            bullets1.append(Snaryad1(hero1.rect.x - 5, hero1.rect.y + 32, facing1))
-            kshoot1 += 1
-
-    if keys[pygame.K_F1]:
-        damage = 0
-        damage1 = 0
-
-    kpshoot += 1
-    kpshoot1 += 1
+        pygame.event.clear()
     if not game.startlvl:
-        DrawWindow()
-    hero.update(leftP, rightP, upP, platforms)
-    hero1.update(leftP1, rightP1, upP1, platforms)
-    for bullet in bullets:
-        bullet.draw()
-    for bullet in bullets1:
-        bullet.draw()
+        setting = open('data/tools/music.ini', encoding='utf-8').read()
+        if setting == 'on':
+            pygame.mixer_music.set_volume(0.2)
+        else:
+            pygame.mixer_music.set_volume(0)
+        # print(clock.get_fps())
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sound_button_press.play()
+                pygame.time.wait(600)
+                running = False
+            if event.type == pygame.USEREVENT:
+                counter -= 1
+                if counter >= 0:
+                    seconds = counter
+                    minutes = 0
+                    while seconds >= 60:
+                        seconds -= 60
+                        minutes += 1
+                    if len(str(seconds)) == 1:
+                        seconds = '0' + str(seconds)
+                    round_time = '{}:{}'.format(minutes, seconds)
+                    text = round_time.rjust(3)
+                    if round_time == '5:00':
+                        sound_5_min.play()
+                    # if round_time == '1:00':
+                    #     sound_1_min.play()
+                if counter == 0:
+                    pygame.mixer_music.stop()
+                    screenm.blit(load_image("images/menu.png"), (0, 0))
+                    game.menu()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    screenm.blit(load_image("images/menu.png"), (0, 0))
+                    pause.pause()
+                if event.key == pygame.K_a:
+                    leftP = True
+                if event.key == pygame.K_d:
+                    rightP = True
+                if event.key == pygame.K_w:
+                    upP = True
+                if event.key == pygame.K_LEFT:
+                    leftP1 = True
+                if event.key == pygame.K_RIGHT:
+                    rightP1 = True
+                if event.key == pygame.K_UP:
+                    upP1 = True
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_a:
+                    leftP = False
+                if event.key == pygame.K_d:
+                    rightP = False
+                if event.key == pygame.K_w:
+                    upP = False
+                if event.key == pygame.K_LEFT:
+                    leftP1 = False
+                if event.key == pygame.K_RIGHT:
+                    rightP1 = False
+                if event.key == pygame.K_UP:
+                    upP1 = False
+
+        for bullet in bullets:
+            if 1300 > bullet.x > -100:
+                bullet.x += bullet.vel
+            else:
+                bullets.pop(bullets.index(bullet))
+
+            if hero1.rect.x + 48 >= bullet.x >= hero1.rect.x and hero1.rect.y + 80 >= bullet.y >= hero1.rect.y:
+                sound_hit.play()
+                damage += 5
+                bullets.pop(bullets.index(bullet))
+
+        if kshoot == 10:
+            flshoot = False
+            kpshoot = 0
+            kshoot = 0
+        if kpshoot == 30:
+            flshoot = True
+        if hero.viewSide == "r":
+            facing = 1
+        elif hero.viewSide == "l":
+            facing = -1
+        if hero1.viewSide == "r":
+            facing1 = 1
+        elif hero1.viewSide == "l":
+            facing1 = -1
+        if counter % 10 == 0:
+            flhealth = True
+        for bullet1 in bullets1:
+            if 1300 > bullet1.x > -100:
+                bullet1.x += bullet1.vel1
+            else:
+                bullets1.pop(bullets1.index(bullet1))
+
+            if hero.rect.x + 48 >= bullet1.x >= hero.rect.x and hero.rect.y + 80 >= bullet1.y >= hero.rect.y:
+                sound_hit.play()
+                damage1 += 5
+                bullets1.pop(bullets1.index(bullet1))
+
+        if kshoot1 == 10:
+            flshoot1 = False
+            kpshoot1 = 0
+            kshoot1 = 0
+        if kpshoot1 == 30:
+            flshoot1 = True
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            if hero.viewSide == "r" and flshoot:
+                sound_rifle_shot.play()
+                bullets.append(Snaryad(hero.rect.x + 48, hero.rect.y + 32, facing))
+                kshoot += 1
+
+            elif hero.viewSide == "l" and flshoot:
+                sound_rifle_shot.play()
+                bullets.append(Snaryad(hero.rect.x - 5, hero.rect.y + 32, facing))
+                kshoot += 1
+
+        if keys[pygame.K_KP0]:
+            if hero1.viewSide == "r" and flshoot1:
+                sound_rifle_shot.play()
+                bullets1.append(Snaryad1(hero1.rect.x + 48, hero1.rect.y + 32, facing1))
+                kshoot1 += 1
+            elif hero1.viewSide == "l" and flshoot1:
+                sound_rifle_shot.play()
+                bullets1.append(Snaryad1(hero1.rect.x - 5, hero1.rect.y + 32, facing1))
+                kshoot1 += 1
+
+        if keys[pygame.K_F1]:
+            damage = 0
+            damage1 = 0
+
+        kpshoot += 1
+        kpshoot1 += 1
+        if not game.startlvl:
+            DrawWindow()
+        hero.update(leftP, rightP, upP, platforms)
+        hero1.update(leftP1, rightP1, upP1, platforms)
+        for bullet in bullets:
+            bullet.draw()
+        for bullet in bullets1:
+            bullet.draw()
 # завершение работы:
 pygame.quit()

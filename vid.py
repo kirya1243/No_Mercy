@@ -2,13 +2,13 @@ import os
 import sys
 import vlc
 import pygame
+import time
+start_time = time.time()
 
 
 def callback(self, player):
     print()
-    print('FPS =', player.get_fps())
-    print('time =', player.get_time(), '(ms)')
-    print('FRAME =', .001 * player.get_time() * player.get_fps())
+    print("-— %s seconds —-" % (time.time() - start_time))
 
 
 a = 1
