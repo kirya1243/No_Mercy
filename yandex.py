@@ -688,6 +688,7 @@ font3 = pygame.font.SysFont('Consolas', 25)
 #           [30, 90, 30, 30, "images/50HP.png", False, 10, 2],
 #           [1140, 90, 30, 30, "images/50HP.png", False, 10, 3]]
 itemss = []
+spawns = []
 
 
 def DrawWindow():
@@ -721,15 +722,16 @@ def DrawWindow():
     elif hp1 <= 0:
         screen.blit(font3.render('ВОЗРАЖДЕНИЕ', True, (255, 255, 255)), (987, 8))
 
-    screen.blit(load_image("images/spawn.png"), (3, 500))
-    screen.blit(load_image("images/spawn.png"), (1137, 500))
+    # screen.blit(load_image("images/spawn.png"), (3, 500))
+    # screen.blit(load_image("images/spawn.png"), (1137, 500))
+    for i in spawns:
+        screen.blit(load_image('images/spawn.png'), (i[0], i[1]))
 
     sprite_group.draw(screen)
 
     for i in itemss:
         if i[5]:
             screen.blit(load_image(i[4]), (i[0], i[1]))
-
 
     if text.split(':')[0] == '0':
         screen.blit(font1.render(text, True, (255, 0, 0)), (555, 10))
@@ -769,6 +771,8 @@ for row in load_level(level.levelmap + '.txt'):
             itemss.append([x, y - 20, 41, 14, "images/railgun_l.png", False, 20, 'RAIL'])
         elif col == 'g':
             itemss.append([x, y - 25, 40, 40, "images/quad.png", False, 80, 'GAIN', 'QUAD'])
+        elif col == 'S':
+            spawns.append([x, y])
         x += 20
     y += 20
     x = 0
@@ -804,6 +808,7 @@ while running:
         platforms = []
         x, y = 0, 0
         itemss = []
+        spawns = []
         for row in load_level(level.levelmap + '.txt'):
             for col in row:
                 if col == '#':
@@ -828,6 +833,8 @@ while running:
                     itemss.append([x, y - 20, 41, 14, "images/railgun_l.png", False, 20, 'RAIL'])
                 elif col == 'g':
                     itemss.append([x, y - 25, 40, 40, "images/quad.png", False, 80, 'GAIN', 'QUAD'])
+                elif col == 'S':
+                    spawns.append([x, y])
                 x += 20
             y += 20
             x = 0
