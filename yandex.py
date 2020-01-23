@@ -177,10 +177,9 @@ class Menu:
         font_menu = pygame.font.SysFont('Arial', 50)
         font_text = pygame.font.SysFont('Arial', 40)
         punkt = 0
-        text1 = font_text.render("INSTA KVEIK 2D v1", True, (240, 0, 0))
-        screenm.blit(text1, (442, 480))
+        text1 = font_text.render("INSTA KVEIK 2D v1", True, (230, 5, 5))
+        screenm.blit(text1, (457, 480))
         while done:
-            # print('MENU', "-— %s seconds —-" % (time.time() - start_time))
             self.render(screenm, font_menu, punkt)
 
             for e in pygame.event.get():
@@ -328,7 +327,7 @@ class Pause:
         game.startlvl = False
         font_pause = pygame.font.SysFont('Arial', 50)
         font_text = pygame.font.SysFont('Arial', 40)
-        text1 = font_text.render("ПАУЗА", True, (240, 0, 0))
+        text1 = font_text.render("ПАУЗА", True, (230, 5, 5))
 
         punkt = 0
         i = punktsp[1]
@@ -724,9 +723,14 @@ punkts = [(470, 90, 'НОВЫЙ БОЙ', (128, 128, 128), (255, 255, 255), 0),
           (522, 230, 'ВЫЙТИ', (128, 128, 128), (255, 255, 255), 2)]
 clock = pygame.time.Clock()
 pygame.time.set_timer(pygame.USEREVENT, 1000)
-font1 = pygame.font.SysFont('Consolas', 50)
-font2 = pygame.font.SysFont('Consolas', 700)
-font3 = pygame.font.SysFont('Consolas', 25)
+# font1 = pygame.font.SysFont('Consolas', 50)
+# font2 = pygame.font.SysFont('Consolas', 700)
+# font3 = pygame.font.SysFont('Consolas', 25)
+
+font1 = pygame.font.Font('data/tools/MangaMaster.ttf', 50)
+font2 = pygame.font.Font('data/tools/MangaMaster.ttf', 700)
+font3 = pygame.font.Font('data/tools/MangaMaster.ttf', 25)
+
 # itemss = [[30, 290, 30, 30, "images/25HP.png", False, 10, 0],
 #           [1140, 290, 30, 30, "images/25HP.png", False, 10, 1],
 #           [30, 90, 30, 30, "images/50HP.png", False, 10, 2],
@@ -751,24 +755,22 @@ def DrawWindow():
     screen.fill(pygame.Color('green'), pygame.Rect(35, 10, hp, 20))
     if hp > 0:
         if hp >= 155:
-            screen.blit(font3.render(str(hp), True, (255, 255, 255)), (190, 9))
+            screen.blit(font3.render(str(hp), True, (255, 255, 255)), (190, 5))
         else:
-            screen.blit(font3.render(str(hp), True, (255, 255, 255)), (hp + 35, 9))
+            screen.blit(font3.render(str(hp), True, (255, 255, 255)), (hp + 35, 5))
     elif hp <= 0:
-        screen.blit(font3.render('ВОЗРАЖДЕНИЕ', True, (255, 255, 255)), (40, 8))
+        screen.blit(font3.render('ВОЗРОЖДЕНИЕ', True, (255, 255, 255)), (55, 4))
 
     screen.fill(pygame.Color('red'), pygame.Rect(965, 10, 200, 20))
     screen.fill(pygame.Color('green'), pygame.Rect(965 + 200 - hp1, 10, hp1, 20))
     if hp1 > 0:
         if hp1 >= 155:
-            screen.blit(font3.render(str(hp1), True, (255, 255, 255)), (967, 9))
+            screen.blit(font3.render(str(hp1), True, (255, 255, 255)), (967, 5))
         else:
-            screen.blit(font3.render(str(hp1), True, (255, 255, 255)), (1120 - hp1, 9))
+            screen.blit(font3.render(str(hp1), True, (255, 255, 255)), (1127 - hp1, 5))
     elif hp1 <= 0:
-        screen.blit(font3.render('ВОЗРАЖДЕНИЕ', True, (255, 255, 255)), (987, 8))
+        screen.blit(font3.render('ВОЗРОЖДЕНИЕ', True, (255, 255, 255)), (989, 4))
 
-    # screen.blit(load_image("images/spawn.png"), (3, 500))
-    # screen.blit(load_image("images/spawn.png"), (1137, 500))
     for i in spawns:
         screen.blit(load_image('images/spawn.png'), (i[0], i[1]))
 
@@ -779,7 +781,7 @@ def DrawWindow():
             else:
                 gain = pygame.transform.scale(load_image("images/protection.png"), (20, 20))
             screen.blit(gain, (240, 10))
-            screen.blit(font3.render(str(i[1]), True, (255, 255, 255)), (265, 8))
+            screen.blit(font3.render(str(i[1]), True, (255, 255, 255)), (265, 6))
 
     if len(gains1) > 0:
         for i in gains1:
@@ -788,7 +790,7 @@ def DrawWindow():
             else:
                 gain = pygame.transform.scale(load_image("images/protection.png"), (20, 20))
             screen.blit(gain, (905, 10))
-            screen.blit(font3.render(str(i[1]), True, (255, 255, 255)), (930, 8))
+            screen.blit(font3.render(str(i[1]), True, (255, 255, 255)), (930, 6))
 
     if len(railshot_draw) > 0:
         for i in railshot_draw:
@@ -805,9 +807,9 @@ def DrawWindow():
             screen.blit(load_image(i[4]), (i[0], i[1]))
 
     if text.split(':')[0] == '0':
-        screen.blit(font1.render(text, True, (255, 0, 0)), (555, 10))
+        screen.blit(font1.render(text, True, (255, 0, 0)), (555, 3))
     else:
-        screen.blit(font1.render(text, True, (255, 255, 255)), (555, 10))
+        screen.blit(font1.render(text, True, (255, 255, 255)), (555, 3))
 
     pygame.display.flip()
 
@@ -866,11 +868,11 @@ while running:
         for i in range(9):
             screenm.blit(load_image('images/' + level.levelmap + '.png'), (0, 0))
             if i == 6:
-                screenm.blit(font2.render('3', True, (255, 255, 255)), (400, -30))
+                screenm.blit(font2.render('3', True, (255, 255, 255)), (400, -140))
             elif i == 7:
-                screenm.blit(font2.render('2', True, (255, 255, 255)), (400, -30))
+                screenm.blit(font2.render('2', True, (255, 255, 255)), (400, -140))
             elif i == 8:
-                screenm.blit(font2.render('1', True, (255, 255, 255)), (400, -30))
+                screenm.blit(font2.render('1', True, (255, 255, 255)), (400, -140))
             pygame.display.flip()
             pygame.time.delay(1130)
         sprite_group.empty()
@@ -1052,7 +1054,7 @@ while running:
                     sound_hit.stop()
                     # sound_jump_down.stop()
                     # sound_jump_up.stop()
-                    # sound_railgun_shot.stop()
+                    sound_railgun_shot.stop()
                     sound_respawn.stop()
                     sound_rifle_shot.stop()
                     sound_gain_end.stop()
@@ -1086,7 +1088,7 @@ while running:
                     sound_hit.stop()
                     # sound_jump_down.stop()
                     # sound_jump_up.stop()
-                    # sound_railgun_shot.stop()
+                    sound_railgun_shot.stop()
                     sound_respawn.stop()
                     sound_rifle_shot.stop()
                     sound_gain_end.stop()
@@ -1329,9 +1331,11 @@ while running:
                         item[5] = False
                 elif item[7] == 'GAIN':
                     if item[8] == 'QUAD':
+                        sound_quad_get.play()
                         gains1.append(['QUAD', 30])
                         item[5] = False
                     elif item[8] == 'PROT':
+                        sound_protection_get.play()
                         gains1.append(['PROT', 30])
                         item[5] = False
 
