@@ -2,8 +2,6 @@ import pygame
 import sys
 import os
 from random import choice
-import vlc
-import time
 
 
 pygame.mixer.init()
@@ -34,18 +32,12 @@ sound_end_round.set_volume(1)
 sound_start_round = pygame.mixer.Sound('data/sounds/game/start_round.wav')
 sound_start_round.set_volume(1)
 
-# sound_beg = pygame.mixer.Sound('data/sounds/hero/beg.wav')
-# sound_beg.set_volume(1)
 sound_change_weapon = pygame.mixer.Sound('data/sounds/hero/change_weapon.wav')
 sound_change_weapon.set_volume(1)
 sound_death = pygame.mixer.Sound('data/sounds/hero/death.wav')
 sound_death.set_volume(1)
 sound_hit = pygame.mixer.Sound('data/sounds/hero/hit.wav')
 sound_hit.set_volume(0.3)
-# sound_jump_down = pygame.mixer.Sound('data/sounds/hero/jump_down.wav')
-# sound_jump_down.set_volume(1)
-# sound_jump_up = pygame.mixer.Sound('data/sounds/hero/jump_up.wav')
-# sound_jump_up.set_volume(1)
 sound_railgun_shot = pygame.mixer.Sound('data/sounds/hero/railgun_shot.wav')
 sound_railgun_shot.set_volume(0.3)
 sound_respawn = pygame.mixer.Sound('data/sounds/hero/respawn.wav')
@@ -99,14 +91,6 @@ def load_level(filename):
         level_map = [line.strip() for line in mapFile]
     max_width = max(map(len, level_map))
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
-
-
-start_time = time.time()
-
-
-def callback(self, player):
-    # pass
-    print("-— %s seconds —-" % (time.time() - start_time))
 
 
 pygame.init()
@@ -208,8 +192,9 @@ class Menu:
                             level.levelf()
                             done = False
                         elif punkt == 1:
-                            pass
-
+                            sound_button_press.play()
+                            pygame.time.wait(600)
+                            os.startfile(os.getcwd() + '/data/tools/video.mp4')
                         elif punkt == 2:
                             sound_button_press.play()
                             pygame.time.wait(600)

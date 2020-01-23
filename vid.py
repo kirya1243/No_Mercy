@@ -64,3 +64,36 @@ while player.get_state() != vlc.State.Ended:
 #                                         if event.key == pygame.K_RETURN:
 #                                             player.play()
 #                             player.e
+
+
+# class Video:
+#     def video(self):
+#         done_video = True
+#         pygame.display.get_wm_info()
+#         movie = os.path.expanduser('data/tools/instruction.mp4')
+#         vlcInstance = vlc.Instance()
+#         media = vlcInstance.media_new(movie)
+#         player = vlcInstance.media_player_new()
+#         em = player.event_manager()
+#         em.event_attach(vlc.EventType.MediaPlayerTimeChanged, callback, player)
+#         win_id = pygame.display.get_wm_info()['window']
+#         player.set_hwnd(win_id)
+#         player.set_media(media)
+#         player.play()
+#         while player.get_state() == vlc.State.Ended or done_video:
+#             for event in pygame.event.get():
+#                 if event.type == pygame.QUIT:
+#                     sys.exit()
+#                 if event.type == pygame.KEYDOWN:
+#                     if event.key == pygame.K_ESCAPE:
+#                         done_video = False
+#         sound_button_press.play()
+#         pygame.time.wait(600)
+#         player.stop()
+#         player = ''
+#         pygame.mixer_music.unpause()
+#         screen.blit(load_image("images/menu.png"), (0, 0))
+#         game.menu()
+#
+#
+# video = Video()
