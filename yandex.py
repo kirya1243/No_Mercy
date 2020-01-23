@@ -135,6 +135,7 @@ class PlatformStone(pygame.sprite.Sprite):
 class PlatformHidden(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
+
         self.image = pygame.image.load('data/images/hidden.png')
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -194,7 +195,7 @@ class Menu:
                         elif punkt == 1:
                             sound_button_press.play()
                             pygame.time.wait(600)
-                            os.startfile(os.getcwd() + '/data/tools/video.mp4')
+                            os.startfile(os.getcwd() + '/data/tools/instruction.mp4')
                         elif punkt == 2:
                             sound_button_press.play()
                             pygame.time.wait(600)
@@ -323,7 +324,6 @@ class End:
             screenm.blit(text3, (517, 230))
         punkt = 0
         while done:
-            # print('LEVEL', "-— %s seconds —-" % (time.time() - start_time))
             self.render(screenm, font_end, punkt)
 
             for e in pygame.event.get():
@@ -332,12 +332,6 @@ class End:
                     pygame.time.wait(600)
                     sys.exit()
                 if e.type == pygame.KEYDOWN:
-                    # if e.key == pygame.K_ESCAPE:
-                    #     sound_button_press.play()
-                    #     pygame.time.wait(600)
-                    #     screenm.blit(load_image("images/menu.png"), (0, 0))
-                    #     game.menu()
-                    #     done = False
                     if e.key == pygame.K_LEFT:
                         if punkt > 0:
                             sound_button_press_map.play()
@@ -381,7 +375,6 @@ punktsend = [[50, 40, 'В ГЛАВНОЕ МЕНЮ', (128, 128, 128), (255, 255, 
              [900, 40, 'РЕВАНШ', (128, 128, 128), (255, 255, 255), 1]]
 end = End(punktsend)
 sizep = 1200, 540
-# screenp = pygame.display.set_mode(sizem)
 screenm.blit(load_image("images/menu.png"), (0, 0))
 
 
@@ -796,9 +789,6 @@ punkts = [(470, 90, 'НОВЫЙ БОЙ', (128, 128, 128), (255, 255, 255), 0),
           (522, 230, 'ВЫЙТИ', (128, 128, 128), (255, 255, 255), 2)]
 clock = pygame.time.Clock()
 pygame.time.set_timer(pygame.USEREVENT, 1000)
-# font1 = pygame.font.SysFont('Consolas', 50)
-# font2 = pygame.font.SysFont('Consolas', 700)
-# font3 = pygame.font.SysFont('Consolas', 25)
 
 font1 = pygame.font.Font('data/tools/MangaMaster.ttf', 50)
 font2 = pygame.font.Font('data/tools/MangaMaster.ttf', 700)
@@ -1001,7 +991,7 @@ while running:
         leftP1 = rightP1 = upP1 = False
         hp1 = 200
         hp = 200
-        counter, text = 120, '2:00'.rjust(3)
+        counter, text = 60, '1:00'.rjust(3)
         weapons = ['RIFLE']
         weapons1 = ['RIFLE']
         gains = []
@@ -1041,6 +1031,7 @@ while running:
                                 hero.viewSide = "l"
                             x = i[0] + 6
                             y = i[1] + 20
+                            sound_respawn.play()
                             hero.rect.x, hero.rect.y = x, y
                             hp = 200
                             rauldead = [False, 4, (0, 0)]
@@ -1055,6 +1046,7 @@ while running:
                                 hero1.viewSide = "l"
                             x = i[0] + 6
                             y = i[1] + 20
+                            sound_respawn.play()
                             hero1.rect.x, hero1.rect.y = x, y
                             hp1 = 200
                             dimadead = [False, 4, (0, 0)]
@@ -1137,13 +1129,13 @@ while running:
 
                 if counter == 0:
                     pygame.mixer_music.stop()
+                    sound_end_round.play()
                     sound_1_min.stop()
                     sound_5_min.stop()
                     sound_button_press.stop()
                     sound_button_press_game.stop()
                     sound_button_press_map.stop()
                     sound_start_game.stop()
-                    sound_end_round.stop()
                     sound_start_round.stop()
                     sound_change_weapon.stop()
                     sound_death.stop()
