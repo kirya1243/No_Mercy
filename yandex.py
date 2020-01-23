@@ -10,7 +10,7 @@ pygame.mixer_music.load('data/sounds/Corrupted Keep.mp3')
 pygame.mixer_music.load('data/sounds/menu.mp3')
 setting = open('data/tools/music.ini', encoding='utf-8').read()
 if setting == 'on':
-    pygame.mixer_music.set_volume(0.1)
+    pygame.mixer_music.set_volume(0.05)
 else:
     pygame.mixer_music.set_volume(0)
 
@@ -160,7 +160,7 @@ class Menu:
         if not pygame.mixer_music.get_busy():
             setting = open('data/tools/music.ini', encoding='utf-8').read()
             if setting == 'on':
-                pygame.mixer_music.set_volume(0.1)
+                pygame.mixer_music.set_volume(0.05)
             else:
                 pygame.mixer_music.set_volume(0)
             pygame.mixer_music.load('data/sounds/menu.mp3')
@@ -304,6 +304,7 @@ class End:
         done = True
         font_score = pygame.font.Font('data/tools/MangaMaster.ttf', 350)
         font_end = pygame.font.SysFont('Arial', 40)
+        font_end1 = pygame.font.SysFont('Arial', 60)
         text1 = font_score.render(str(raulscore), 1, (200, 0, 0))
         screenm.blit(text1, (70, 50))
         text1 = font_score.render(str(dimascore), 1, (0, 0, 200))
@@ -322,6 +323,9 @@ class End:
             screenm.blit(text2, (543, 160))
             text3 = font_end.render('ПОБЕДИЛ', 1, (0, 0, 255))
             screenm.blit(text3, (517, 230))
+        else:
+            text2 = font_end1.render('НИЧЬЯ', 1, (0, 0, 255))
+            screenm.blit(text2, (515, 160))
         punkt = 0
         while done:
             self.render(screenm, font_end, punkt)
@@ -929,7 +933,7 @@ while running:
             pygame.mixer_music.load('data/sounds/Corrupted Keep.mp3')
         setting = open('data/tools/music.ini', encoding='utf-8').read()
         if setting == 'on':
-            pygame.mixer_music.set_volume(0.2)
+            pygame.mixer_music.set_volume(0.1)
         else:
             pygame.mixer_music.set_volume(0)
         pygame.mixer_music.play()
@@ -991,7 +995,7 @@ while running:
         leftP1 = rightP1 = upP1 = False
         hp1 = 200
         hp = 200
-        counter, text = 60, '1:00'.rjust(3)
+        counter, text = 180, '3:00'.rjust(3)
         weapons = ['RIFLE']
         weapons1 = ['RIFLE']
         gains = []
@@ -1008,7 +1012,7 @@ while running:
     if not game.startlvl:
         setting = open('data/tools/music.ini', encoding='utf-8').read()
         if setting == 'on':
-            pygame.mixer_music.set_volume(0.2)
+            pygame.mixer_music.set_volume(0.1)
         else:
             pygame.mixer_music.set_volume(0)
         # print(clock.get_fps())
