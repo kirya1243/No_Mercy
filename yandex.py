@@ -693,7 +693,8 @@ spawns = []
 
 def DrawWindow():
     screen.blit(load_image('images/' + level.levelmap + '.png'), (0, 0))
-
+    if rauldead[1] >= 0 and rauldead[0] == True:
+        screen.blit(load_image('images/grave.png'), (hero.rect.x, hero.rect.y))
     for bullet in bullets:
         bullet.draw()
 
@@ -843,6 +844,8 @@ while running:
         hero1 = Dima(1147, 520)
         sprite_group.add(hero)
         sprite_group.add(hero1)
+        rauldead = [False, 4]
+        dimadead = [False, 4]
         leftP = rightP = upP = False
         leftP1 = rightP1 = upP1 = False
         hp1 = 200
@@ -883,7 +886,16 @@ while running:
                 # elif col == 'g':
                 #     itemss.append([x, y - 20, 41, 16, "images/rifle_r.png", False, 80, 'GAIN'])
                 if counter >= 0:
-
+                    if rauldead[0] == True:
+                        if rauldead[1] > 0:
+                            rauldead[1] -= 1
+                        else:
+                            hero.rect.x = 5
+                            hero.rect.y = 520
+                            hero.viewSide = "r"
+                            rauldead[0] = False
+                            rauldead[1] = 4
+                            hp = 200
                     for i in itemss:
                         if not i[5] and i[7] != 'GAIN':
                             i[6] -= 1
@@ -981,7 +993,9 @@ while running:
                 sound_hit.play()
                 hp1 -= 5
                 bullets.pop(bullets.index(bullet))
-
+        if hp == 0:
+            rauldead[0] = True
+            hero.rect.x = 1500
         if kshoot == 10:
             flshoot = False
             kpshoot = 0
