@@ -301,6 +301,100 @@ punktsmap = [[100, 30, 'The Longest Yard', (128, 128, 128), (255, 255, 255), 0],
              [700, 30, 'Corrupted Keep', (128, 128, 128), (255, 255, 255), 1]]
 level = Level(punktsmap)
 
+
+class End:
+    def __init__(self, punktsend=[0, 0, 'Punkt', (250, 250, 30), (250, 250, 30), 0]):
+        self.punkts = punktsend
+
+    def render(self, holst, font, num_punkt):
+        for i in self.punkts:
+            if num_punkt == i[5]:
+                holst.blit(font.render(i[2], 1, i[4]), (i[0], i[1]))
+            else:
+                holst.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
+
+    def endf(self):
+        pygame.event.clear()
+        done = True
+        font_score = pygame.font.Font('data/tools/MangaMaster.ttf', 350)
+        font_end = pygame.font.SysFont('Arial', 40)
+        text1 = font_score.render(str(raulscore), 1, (200, 0, 0))
+        screenm.blit(text1, (70, 50))
+        text1 = font_score.render(str(dimascore), 1, (0, 0, 200))
+        screenm.blit(text1, (870, 50))
+        if dimascore < raulscore:
+            text1 = font_end.render('ПЕРВЫЙ', 1, (220, 0, 0))
+            screenm.blit(text1, (525, 90))
+            text2 = font_end.render('ИГРОК', 1, (220, 0, 0))
+            screenm.blit(text2, (543, 160))
+            text3 = font_end.render('ПОБЕДИЛ', 1, (220, 0, 0))
+            screenm.blit(text3, (517, 230))
+        elif dimascore > raulscore:
+            text1 = font_end.render('ВТОРОЙ', 1, (0, 0, 255))
+            screenm.blit(text1, (525, 90))
+            text2 = font_end.render('ИГРОК', 1, (0, 0, 255))
+            screenm.blit(text2, (543, 160))
+            text3 = font_end.render('ПОБЕДИЛ', 1, (0, 0, 255))
+            screenm.blit(text3, (517, 230))
+        punkt = 0
+        while done:
+            # print('LEVEL', "-— %s seconds —-" % (time.time() - start_time))
+            self.render(screenm, font_end, punkt)
+
+            for e in pygame.event.get():
+                if e.type == pygame.QUIT:
+                    sound_button_press.play()
+                    pygame.time.wait(600)
+                    sys.exit()
+                if e.type == pygame.KEYDOWN:
+                    # if e.key == pygame.K_ESCAPE:
+                    #     sound_button_press.play()
+                    #     pygame.time.wait(600)
+                    #     screenm.blit(load_image("images/menu.png"), (0, 0))
+                    #     game.menu()
+                    #     done = False
+                    if e.key == pygame.K_LEFT:
+                        if punkt > 0:
+                            sound_button_press_map.play()
+                            pygame.time.wait(200)
+                            pygame.event.clear()
+                            punkt -= 1
+                    if e.key == pygame.K_RIGHT:
+                        if punkt < len(self.punkts) - 1:
+                            sound_button_press_map.play()
+                            pygame.time.wait(200)
+                            pygame.event.clear()
+                            punkt += 1
+                    if e.key == pygame.K_RETURN:
+                        if punkt == 0:
+                            # self.levelmap = 'level_1'
+                            # screenm.blit(load_image('images/menu.png'), (0, 0))
+                            pygame.mixer_music.stop()
+                            screenm.blit(load_image("images/menu.png"), (0, 0))
+                            game.menu()
+                            # sound_start_game.play()
+                            # pygame.time.wait(3000)
+                            # game.startlvl = True
+                            done = False
+                        elif punkt == 1:
+                            # self.levelmap = 'level_2'
+                            # screenm.blit(load_image('images/level_2.png'), (0, 0))
+                            pygame.mixer_music.stop()
+                            sound_button_press_game.play()
+                            pygame.time.wait(600)
+                            screenm.blit(load_image("images/map.png"), (0, 0))
+                            level.levelf()
+                            # sound_start_game.play()
+                            # pygame.time.wait(3000)
+                            # game.startlvl = True
+                            done = False
+            screen.blit(screenm, (0, 0))
+            pygame.display.flip()
+
+
+punktsend = [[50, 40, 'В ГЛАВНОЕ МЕНЮ', (128, 128, 128), (255, 255, 255), 0],
+             [900, 40, 'РЕВАНШ', (128, 128, 128), (255, 255, 255), 1]]
+end = End(punktsend)
 sizep = 1200, 540
 # screenp = pygame.display.set_mode(sizem)
 screenm.blit(load_image("images/menu.png"), (0, 0))
@@ -414,7 +508,7 @@ class Raul(pygame.sprite.Sprite):
         self.stay = True
         self.viewSide = 'r'
         self.stayR = ["Raul_r0.png", "Raul_r1.png", "Raul_r2.png", "Raul_r3.png", "Raul_r4.png", "Raul_r5.png"]
-        self.stayL = ["Raul_l0.png", "Raul_l1.png", "v_l2.png", "Raul_l3.png", "Raul_l4.png", "Raul_l5.png"]
+        self.stayL = ["Raul_l0.png", "Raul_l1.png", "Raul_l2.png", "Raul_l3.png", "Raul_l4.png", "Raul_l5.png"]
         self.begR = ["Raul_r1b.png", "Raul_r2b.png", "Raul_r3b.png", "Raul_r2b.png"]
         self.begL = ["Raul_l1b.png", "Raul_l2b.png", "Raul_l3b.png", "Raul_l2b.png"]
         self.sChMarker = 1
@@ -922,7 +1016,7 @@ while running:
         leftP1 = rightP1 = upP1 = False
         hp1 = 200
         hp = 200
-        counter, text = 180, '3:00'.rjust(3)
+        counter, text = 120, '2:00'.rjust(3)
         weapons = ['RIFLE']
         weapons1 = ['RIFLE']
         gains = []
@@ -1086,7 +1180,7 @@ while running:
                     sound_weapon_get.stop()
                     sound_weapon_spawn.stop()
                     screenm.blit(load_image("images/menu.png"), (0, 0))
-                    game.menu()
+                    end.endf()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     sound_1_min.stop()
