@@ -49,7 +49,6 @@ sound_hit.set_volume(0.3)
 # sound_jump_up.set_volume(1)
 sound_railgun_shot = pygame.mixer.Sound('data/sounds/hero/railgun_shot.wav')
 sound_railgun_shot.set_volume(0.3)
-print(sound_railgun_shot.get_length())
 sound_respawn = pygame.mixer.Sound('data/sounds/hero/respawn.wav')
 sound_respawn.set_volume(1)
 sound_rifle_shot = pygame.mixer.Sound('data/sounds/hero/rifle_shot.wav')
@@ -742,7 +741,8 @@ railshot_draw = []
 
 def DrawWindow():
     screen.blit(load_image('images/' + level.levelmap + '.png'), (0, 0))
-
+    if rauldead[1] >= 0 and rauldead[0] == True:
+        screen.blit(load_image('images/grave.png'), (hero.rect.x, hero.rect.y))
     for bullet in bullets:
         bullet.draw()
 
@@ -916,6 +916,8 @@ while running:
         hero1 = Dima(1147, 520)
         sprite_group.add(hero)
         sprite_group.add(hero1)
+        rauldead = [False, 4]
+        dimadead = [False, 4]
         leftP = rightP = upP = False
         leftP1 = rightP1 = upP1 = False
         hp1 = 200
@@ -961,6 +963,16 @@ while running:
                 # elif col == 'g':
                 #     itemss.append([x, y - 20, 41, 16, "images/rifle_r.png", False, 80, 'GAIN'])
                 if counter >= 0:
+                    if rauldead[0] == True:
+                        if rauldead[1] > 0:
+                            rauldead[1] -= 1
+                        else:
+                            hero.rect.x = 5
+                            hero.rect.y = 520
+                            hero.viewSide = "r"
+                            rauldead[0] = False
+                            rauldead[1] = 4
+                            hp = 200
                     if len(gains) > 0:
                         for i in gains:
                             i[1] -= 1
@@ -1191,7 +1203,9 @@ while running:
                         hp1 -= damage
                 bullets.pop(bullets.index(bullet))
                 railshot_draw.append([bullet.x, bullet.facing, 2, bullet.y])
-
+        if hp == 0:
+            rauldead[0] = True
+            hero.rect.x = 1500
         if kshoot == 7:
             flshoot = False
             kpshoot = 0
