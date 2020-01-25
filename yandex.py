@@ -10,7 +10,7 @@ pygame.mixer_music.load('data/sounds/Corrupted Keep.mp3')
 pygame.mixer_music.load('data/sounds/menu.mp3')
 setting = open('data/tools/music.ini', encoding='utf-8').read()
 if setting == 'on':
-    pygame.mixer_music.set_volume(0.05)
+    pygame.mixer_music.set_volume(0.1)
 else:
     pygame.mixer_music.set_volume(0)
 
@@ -160,7 +160,7 @@ class Menu:
         if not pygame.mixer_music.get_busy():
             setting = open('data/tools/music.ini', encoding='utf-8').read()
             if setting == 'on':
-                pygame.mixer_music.set_volume(0.05)
+                pygame.mixer_music.set_volume(0.1)
             else:
                 pygame.mixer_music.set_volume(0)
             pygame.mixer_music.load('data/sounds/menu.mp3')
@@ -172,11 +172,11 @@ class Menu:
         screenm.blit(text1, (457, 480))
         while done:
             self.render(screenm, font_menu, punkt)
-
+            pygame.event.clear(pygame.K_UP, pygame.K_DOWN)
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     sound_button_press.play()
-                    pygame.time.wait(600)
+                    pygame.time.delay(600)
                     sys.exit()
                 if e.type == pygame.KEYDOWN:
                     if e.key == pygame.K_UP:
@@ -188,17 +188,17 @@ class Menu:
                     if e.key == pygame.K_RETURN:
                         if punkt == 0:
                             sound_button_press_game.play()
-                            pygame.time.wait(600)
+                            pygame.time.delay(600)
                             screenm.blit(load_image("images/map.png"), (0, 0))
                             level.levelf()
                             done = False
                         elif punkt == 1:
                             sound_button_press.play()
-                            pygame.time.wait(600)
+                            pygame.time.delay(600)
                             os.startfile(os.getcwd() + '/data/tools/instruction.mp4')
                         elif punkt == 2:
                             sound_button_press.play()
-                            pygame.time.wait(600)
+                            pygame.time.delay(600)
                             sys.exit()
             screen.blit(screenm, (0, 0))
             pygame.display.flip()
@@ -241,25 +241,25 @@ class Level:
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     sound_button_press.play()
-                    pygame.time.wait(600)
+                    pygame.time.delay(600)
                     sys.exit()
                 if e.type == pygame.KEYDOWN:
                     if e.key == pygame.K_ESCAPE:
                         sound_button_press.play()
-                        pygame.time.wait(600)
+                        pygame.time.delay(600)
                         screenm.blit(load_image("images/menu.png"), (0, 0))
                         game.menu()
                         done = False
                     if e.key == pygame.K_LEFT:
                         if punkt > 0:
                             sound_button_press_map.play()
-                            pygame.time.wait(200)
+                            pygame.time.delay(200)
                             pygame.event.clear()
                             punkt -= 1
                     if e.key == pygame.K_RIGHT:
                         if punkt < len(self.punkts) - 1:
                             sound_button_press_map.play()
-                            pygame.time.wait(200)
+                            pygame.time.delay(200)
                             pygame.event.clear()
                             punkt += 1
                     if e.key == pygame.K_RETURN:
@@ -268,7 +268,7 @@ class Level:
                             screenm.blit(load_image('images/level_1.png'), (0, 0))
                             pygame.mixer_music.stop()
                             sound_start_game.play()
-                            pygame.time.wait(3000)
+                            pygame.time.delay(3000)
                             game.startlvl = True
                             done = False
                         elif punkt == 1:
@@ -276,7 +276,7 @@ class Level:
                             screenm.blit(load_image('images/level_2.png'), (0, 0))
                             pygame.mixer_music.stop()
                             sound_start_game.play()
-                            pygame.time.wait(3000)
+                            pygame.time.delay(3000)
                             game.startlvl = True
                             done = False
             screen.blit(screenm, (0, 0))
@@ -333,43 +333,33 @@ class End:
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     sound_button_press.play()
-                    pygame.time.wait(600)
+                    pygame.time.delay(600)
                     sys.exit()
                 if e.type == pygame.KEYDOWN:
                     if e.key == pygame.K_LEFT:
                         if punkt > 0:
                             sound_button_press_map.play()
-                            pygame.time.wait(200)
+                            pygame.time.delay(200)
                             pygame.event.clear()
                             punkt -= 1
                     if e.key == pygame.K_RIGHT:
                         if punkt < len(self.punkts) - 1:
                             sound_button_press_map.play()
-                            pygame.time.wait(200)
+                            pygame.time.delay(200)
                             pygame.event.clear()
                             punkt += 1
                     if e.key == pygame.K_RETURN:
                         if punkt == 0:
-                            # self.levelmap = 'level_1'
-                            # screenm.blit(load_image('images/menu.png'), (0, 0))
                             pygame.mixer_music.stop()
                             screenm.blit(load_image("images/menu.png"), (0, 0))
                             game.menu()
-                            # sound_start_game.play()
-                            # pygame.time.wait(3000)
-                            # game.startlvl = True
                             done = False
                         elif punkt == 1:
-                            # self.levelmap = 'level_2'
-                            # screenm.blit(load_image('images/level_2.png'), (0, 0))
                             pygame.mixer_music.stop()
                             sound_button_press_game.play()
-                            pygame.time.wait(600)
+                            pygame.time.delay(600)
                             screenm.blit(load_image("images/map.png"), (0, 0))
                             level.levelf()
-                            # sound_start_game.play()
-                            # pygame.time.wait(3000)
-                            # game.startlvl = True
                             done = False
             screen.blit(screenm, (0, 0))
             pygame.display.flip()
@@ -419,7 +409,7 @@ class Pause:
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     sound_button_press.play()
-                    pygame.time.wait(600)
+                    pygame.time.delay(600)
                     sys.exit()
                 if e.type == pygame.KEYDOWN:
                     if e.key == pygame.K_ESCAPE:
@@ -437,7 +427,7 @@ class Pause:
                             done = False
                         elif punkt == 1:
                             sound_button_press.play()
-                            pygame.time.wait(500)
+                            pygame.time.delay(500)
                             setting = open('data/tools/music.ini', encoding='utf-8').read()
                             if setting == 'on':
                                 open('data/tools/music.ini', 'w').close()
@@ -458,7 +448,7 @@ class Pause:
                         elif punkt == 2:
                             pygame.mixer_music.stop()
                             sound_button_press.play()
-                            pygame.time.wait(600)
+                            pygame.time.delay(600)
                             screenm.blit(load_image("images/menu.png"), (0, 0))
                             game.startlvl = True
                             game.menu()
@@ -724,8 +714,8 @@ class Dima(pygame.sprite.Sprite):
 
 hero = Raul(5, 520)
 hero1 = Dima(1147, 520)
-leftP = rightP = upP = False
-leftP1 = rightP1 = upP1 = False
+leftP, rightP, upP = False, False, False
+leftP1, rightP1, upP1 = False, False, False
 gains = []
 gains1 = []
 bullets = []
@@ -742,7 +732,7 @@ GRAVITY = 2
 speed = 10
 hp1 = 200
 hp = 200
-counter, text = 180, '3:00'.rjust(3)
+counter, text = 300, '5:00'.rjust(3)
 
 flshoot = True
 kshoot = 0
@@ -933,7 +923,7 @@ while running:
             pygame.mixer_music.load('data/sounds/Corrupted Keep.mp3')
         setting = open('data/tools/music.ini', encoding='utf-8').read()
         if setting == 'on':
-            pygame.mixer_music.set_volume(0.1)
+            pygame.mixer_music.set_volume(0.3)
         else:
             pygame.mixer_music.set_volume(0)
         pygame.mixer_music.play()
@@ -991,11 +981,11 @@ while running:
         sprite_group.add(hero1)
         rauldead = [False, 4, (0, 0)]
         dimadead = [False, 4, (0, 0)]
-        leftP = rightP = upP = False
-        leftP1 = rightP1 = upP1 = False
+        leftP, rightP, upP = False, False, False
+        leftP1, rightP1, upP1 = False, False, False
         hp1 = 200
         hp = 200
-        counter, text = 180, '3:00'.rjust(3)
+        counter, text = 300, '5:00'.rjust(3)
         weapons = ['RIFLE']
         weapons1 = ['RIFLE']
         gains = []
@@ -1012,14 +1002,13 @@ while running:
     if not game.startlvl:
         setting = open('data/tools/music.ini', encoding='utf-8').read()
         if setting == 'on':
-            pygame.mixer_music.set_volume(0.1)
+            pygame.mixer_music.set_volume(0.3)
         else:
             pygame.mixer_music.set_volume(0)
-        # print(clock.get_fps())
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sound_button_press.play()
-                pygame.time.wait(600)
+                pygame.time.delay(600)
                 running = False
             if event.type == pygame.USEREVENT:
                 counter -= 1
@@ -1028,6 +1017,10 @@ while running:
                         rauldead[1] -= 1
                         if rauldead[1] == 0:
                             hero.yvel = 0
+                            hero.xvel = 0
+                            hero.stay = True
+                            hero.onGround = False
+                            leftP, rightP, upP = False, False, False
                             i = choice(spawns)
                             if i[0] <= 600:
                                 hero.viewSide = "r"
@@ -1043,6 +1036,10 @@ while running:
                         dimadead[1] -= 1
                         if dimadead[1] == 0:
                             hero1.yvel = 0
+                            hero1.xvel = 0
+                            hero1.stay = True
+                            hero1.onGround = False
+                            leftP1, rightP1, upP1 = False, False, False
                             i = choice(spawns)
                             if i[0] <= 600:
                                 hero1.viewSide = "r"
@@ -1495,6 +1492,11 @@ while running:
         if keys[pygame.K_F1]:
             hp1 = 200
             hp = 200
+        if keys[pygame.K_F5]:
+            hero.yvel = 0
+            hero.rect.x, hero.rect.y = 5, 440
+            hero1.yvel = 0
+            hero1.rect.x, hero1.rect.y = 1147, 440
 
         kpshoot += 1
         kpshoot1 += 1
